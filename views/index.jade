@@ -1,0 +1,112 @@
+extends layout
+
+block content
+  // banner
+  .banner
+    .container
+      section.slider
+        .flexslider
+          ul.slides
+            li
+              .banner-info
+                h1 更多的孩子需要您的帮助
+                p 十年树木，百年树人，孩子是未来，青幼年教育是头等大事
+            li
+              .banner-info
+                h1 占位符
+                p XXXXXXXXXXX
+            li
+              .banner-info
+                h1 占位符
+                p YYYYYYYYYYYY
+      // FlexSlider
+      link(rel='stylesheet', href='css/flexslider.css', type='text/css', media='screen')
+      script(defer='', src='js/jquery.flexslider.js')
+      script(type='text/javascript').
+          $(window).load(function(){
+              $('.flexslider').flexslider({
+                  animation: "slide",
+                  start: function(slider){
+                      $('body').removeClass('loading');
+                  }
+              });
+          });
+      // End-slider-script
+  // //banner
+  // 热门课程
+  .testimonials
+    .container
+      h3 热门课程
+      .testimonial-grids
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            a
+              | Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
+              i
+                | Micheal
+                span Manager
+            .testimonial-grd-pos
+              span
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            a
+              | Temporibus autem quibusdam et aut officiis debitis aut
+              | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
+              | sint et molestiae non recusandae.
+              i
+                | Smith
+                span Manager
+            .testimonial-grd-pos1
+              span
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            a
+              | Temporibus autem quibusdam et aut officiis debitis aut
+              | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
+              | sint et molestiae non recusandae.
+              i
+                | Williums
+                span Manager
+            .testimonial-grd-pos2
+              span
+        .clearfix
+  // 名牌讲师
+  .testimonials
+    .container
+      h3 名牌讲师
+      .testimonial-grids
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            p
+              | Temporibus autem quibusdam et aut officiis debitis aut
+              | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
+              | sint et molestiae non recusandae.
+              i
+                | Micheal
+                span Manager
+            .testimonial-grd-pos
+              span
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            p
+              | Temporibus autem quibusdam et aut officiis debitis aut
+              | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
+              | sint et molestiae non recusandae.
+              i
+                | Smith
+                span Manager
+            .testimonial-grd-pos1
+              span
+        .col-md-4.testimonial-grid
+          .testimonial-grd
+            p
+              | Temporibus autem quibusdam et aut officiis debitis aut
+              | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
+              | sint et molestiae non recusandae.
+              i
+                | Williums
+                span Manager
+            .testimonial-grd-pos2
+              span
+        .clearfix
+

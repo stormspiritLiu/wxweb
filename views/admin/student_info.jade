@@ -1,0 +1,37 @@
+//
+   Created by 刘柘林 on 2018/1/30.
+extends admin_layout
+- var students
+
+block script
+    script(src='/js/my_js/stu_review.js')
+
+block content
+    .container
+        .bs-docs-example
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th 账号
+                        th 学校
+                        th 年级
+                        th 姓名
+                        th 状态
+                        th 操作
+                tbody
+                    each stu,idx in students
+                        tr(id = stu.id)
+                            td #{idx + 1}
+                            td #{stu.account}
+                            td #{stu.school}
+                            td #{stu.grade}
+                            td #{stu.name}
+                            -if(stu.state == 1)
+                                td 已过审
+                                td
+                                    span.label.label-danger 封禁
+                            -else
+                                td 未过审
+                                td
+                                    span.label.label-success 通过

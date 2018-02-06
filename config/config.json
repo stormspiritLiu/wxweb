@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "root",
+    "password": "buzhidao1996",
+    "database": "wxweb",
+    "host": "localhost",
+    "port":"3306",
+    "dialect": "mysql"
+  }
+}

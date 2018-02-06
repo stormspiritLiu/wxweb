@@ -1,0 +1,123 @@
+doctype html
+- var student,teacher
+html
+  head
+    title 武训网
+    // for-mobile-apps
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    script(type='application/x-javascript').
+        addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); }
+    // //for-mobile-apps
+    link(href='/css/bootstrap.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/css/style.css', rel='stylesheet', type='text/css', media='all')
+    link(href='/css/mystyle.css', rel='stylesheet', type='text/css', media='all')
+    // js
+    script(src='/js/jquery-1.11.1.min.js')
+    block script
+    // //js
+  body
+    // header
+    .header
+      .container
+        .header-top
+          .header-top-left
+            p 面向青幼年的免费教育网站
+          .header-top-right
+            -if(student)
+              p
+                | 欢迎, #{student.name}
+                span
+                  i.glyphicon.glyphicon-earphone(aria-hidden='true')
+                  | 12345678910
+            -else if(teacher)
+              p
+                | 欢迎, #{teacher.name}
+                span
+                  i.glyphicon.glyphicon-earphone(aria-hidden='true')
+                  | 12345678910
+            -else
+              p
+                a(href="/login") 登录
+                span
+                  i.glyphicon.glyphicon-earphone(aria-hidden='true')
+                  | 12345678910
+            //p
+            //  | 联系我们
+            //  span
+            //    i.glyphicon.glyphicon-earphone(aria-hidden='true')
+            //    | 12345678910
+          .clearfix
+    .header-logo
+      .container
+        .header-nav
+          nav.navbar.navbar-default
+            // Brand and toggle get grouped for better mobile display
+            .navbar-header
+              button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              .logo
+                a.navbar-brand(href='/index')
+                  | 武训网
+                  span For the Next Generation
+            // Collect the nav links, forms, and other content for toggling
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse.nav-wil
+              ul.nav.navbar-nav
+                li.hvr-bounce-to-bottom
+                  a(href='index') 主页
+                li.hvr-bounce-to-bottom
+                  a(href='course') 选课中心
+                li.hvr-bounce-to-bottom
+                  a(href='teacher') 名师讲堂
+                li.hvr-bounce-to-bottom
+                  a(href='live') 直播课堂
+                li.hvr-bounce-to-bottom
+                  a(href='myself') 我的信息
+                li.hvr-bounce-to-bottom
+                  a(href='help') 帮助
+            // /.navbar-collapse
+    // //header
+    block content
+    // footer
+    .footer
+      .container
+        .col-md-3.footer-grid
+          h6 关于我们
+          p 武训网创办目标就是学习义乞武训无私资助贫困学生教育精神，为广大边区学生输送优质教育资源
+        .col-md-3.footer-grid
+          h6 友情链接
+          ul
+            li
+              a(href='https://open.163.com/') 网易公开课
+            li
+              a(href='https://www.icourse163.org/') 中国大学慕课网
+        .col-md-3.footer-grid
+          h6 鸣谢
+          ul
+            li
+              a(href='http://www.moe.gov.cn/') 中国教育部
+            li
+              a(href='http://www.go9999.com/') 中国支教联盟
+            li 广大志愿者
+        .col-md-3.footer-grid
+          h6 关注我们
+          ul
+            li
+              a 新浪微博
+            li
+              a 腾讯微博
+            li
+              a 微信平台
+            li
+              a 人人网
+        .clearfix
+    .footer-copy
+      p Copyright © 2016.武训网 All rights reserved
+    // //footer
+    // for bootstrap working
+    script(src='/js/bootstrap.js')
+    // //for bootstrap working

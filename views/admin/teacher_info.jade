@@ -1,0 +1,37 @@
+//
+   Created by 刘柘林 on 2018/1/30.
+extends admin_layout
+- var teachers
+
+block script
+    script(src='/js/my_js/tea_review.js')
+
+block content
+    .container
+        .bs-docs-example
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th 账号
+                        th 教育对象
+                        th 科目
+                        th 姓名
+                        th 状态
+                        th 操作
+                tbody
+                    each tea,idx in teachers
+                        tr(id = tea.id)
+                            td #{idx + 1}
+                            td #{tea.account}
+                            td #{tea.grade}
+                            td #{tea.category}
+                            td #{tea.name}
+                            -if(tea.state == 1)
+                                td 已过审
+                                td
+                                    span.label.label-danger 封禁
+                            -else
+                                td 未过审
+                                td
+                                    span.label.label-success 通过

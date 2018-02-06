@@ -1,0 +1,38 @@
+.select_course{
+	padding:1.5em 0em;
+}
+
+.top-nav {
+	float: left;
+}
+.top-nav h3 {
+	 margin:10px 5px 15px 0px;
+}
+.top-nav ul {
+	margin: 0;
+	cursor: pointer;
+}
+.top-nav ul li {
+  	list-style-type: none;
+  	display: inline-block;
+  	margin: 0 0.8em;
+  	font-size: 14px;
+}
+
+.top-nav li:hover{
+  	color: #f63030;
+}
+
+.select-cur {
+	color: #ffffff;
+    background-color: #0BC7B4;
+}
+
+.my_title{
+	font-size:2em;
+	text-align:center;
+}
+
+.my_title1{
+	font-size:1.2em;
+}
