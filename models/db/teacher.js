@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING
         },
         information:{
-            type: DataTypes.TEXT('long')
+            type: DataTypes.TEXT
         },
         teaching_age:{
             type: DataTypes.INTEGER

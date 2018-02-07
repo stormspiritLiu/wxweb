@@ -1,0 +1,58 @@
+//
+   Created by 刘柘林 on 2018/2/6.
+extends  ../layout
+-var courses,t_name
+block script
+    script(src='/js/my_js/select_course.js')
+    script(src='/js/my_js/background.js')
+block content
+    .select_course
+        .container
+            .top-nav
+                h3
+                    b 年级
+                ul#grade
+                    li.select-cur(data-selected="1") 全部
+                    li 一年级
+                    li 二年级
+                    li 三年级
+                    li 四年级
+                    li 五年级
+                    li 六年级
+                    li 初一
+                    li 初二
+                    li 初三
+                    li 高一
+                    li 高二
+                    li 高三
+            .top-nav
+                h3
+                    b 学科
+                ul#category
+                    li.select-cur(data-selected="1") 全部
+                    li 语文
+                    li 数学
+                    li 英语
+                    li 物理
+                    li 化学
+                    li 生物
+                    li 政治
+                    li 历史
+                    li 地理
+                    li 其他
+    .select_course
+        .container
+            .testimonial-grids#courses
+                each item,index in courses
+                    .col-md-4.testimonial-grid
+                        .testimonial-grd
+                            a(href='/course/detail?cid='+ '' + item.dataValues.id+ '')
+                                i #{item.dataValues.title}
+                                | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
+                                br
+                                | 参与人数：#{item.dataValues.participants}
+                                br
+                                | 教师:&nbsp;
+                                span #{t_name[index]}
+                            .testimonial-grd-pos
+                                span

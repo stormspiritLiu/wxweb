@@ -4,3 +4,4 @@
 exports.Admin = require('./admin');
 exports.Student = require('./student');
 exports.Teacher = require('./teacher');
+exports.Course = require('./course');

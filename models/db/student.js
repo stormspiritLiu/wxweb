@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.INTEGER
         },
         information:{
-            type: DataTypes.TEXT('long')
+            type: DataTypes.TEXT
         }
     },{
         underscore: true,

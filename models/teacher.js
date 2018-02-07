@@ -10,5 +10,11 @@ Teacher.findByAccount = function (account) {
         }
     });
 };
-
+Teacher.findById = function (id) {
+    return Teacher.findOne({
+        where:{
+            id:id
+        }
+    });
+};
 module.exports = Teacher;
