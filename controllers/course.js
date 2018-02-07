@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
         },
         function(courses, callback){
             var count = 0;
+            var t_name = [];
             courses.forEach(function (item) {
-                var t_name = [];
-                Teacher.findById(item.dataValues.id).then(function (teacher) {
+                Teacher.findById(item.dataValues.t_id).then(function (teacher) {
                     t_name.push(teacher.name)
                 }).then(function () {
                     count++;
@@ -50,10 +50,11 @@ router.post('/', function(req, res, next) {
             if(courses.length == 0){
                 callback(null,[],[])
             }else{
+                var t_name = [];
                 courses.forEach(function (item) {
-                    var t_name = [];
-                    Teacher.findById(item.dataValues.id).then(function (teacher) {
-                        t_name.push(teacher.name)
+                    Teacher.findById(item.dataValues.t_id).then(function (teacher) {
+                        t_name.push(teacher.name);
+                        console.log(count);console.log(t_name);
                     }).then(function () {
                         count++;
                         if(count == courses.length){
@@ -64,7 +65,7 @@ router.post('/', function(req, res, next) {
             }
         },
     ], function (err, courses,t_name) {
-        console.log(t_name);
+        // console.log(t_name);
         res.json({
             courses:courses,
             t_name:t_name

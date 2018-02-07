@@ -15,7 +15,6 @@ function search() {
             console.log(res);
             var str = "";
             $.each(res.courses,function (index,item) {
-                console.log(item);
                 str += "<div class=\"col-md-4 testimonial-grid\">" +
                     "<div class=\"testimonial-grd\">" +
                     "<a href=\"/course/detail?cid="+ item.id +"\">" +
