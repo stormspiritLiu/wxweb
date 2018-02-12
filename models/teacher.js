@@ -17,4 +17,49 @@ Teacher.findById = function (id) {
         }
     });
 };
+
+//通过年级科目查找老师
+Teacher.findByTwo = function (category, grade) {
+    if(category == "全部"){
+        if(grade == "全部"){
+            return Teacher.findAll({
+                where:{
+                    state: 1
+                }
+            });
+        }else{
+            return Teacher.findAll({
+                where: {
+                    '$and': [
+                        {grade: grade},
+                        {state: 1}
+                    ]
+                }
+            });
+        }
+    }else{
+        if(grade == "全部"){
+            return Teacher.findAll({
+                where: {
+                    '$and': [
+                        {category: category},
+                        {state: 1}
+                    ]
+                }
+            });
+        }else{
+            return Teacher.findAll({
+                where: {
+                    '$and': [
+                        {category: category},
+                        {grade: grade},
+                        {state: 1}
+                    ]
+                }
+            });
+        }
+    }
+
+};
+
 module.exports = Teacher;

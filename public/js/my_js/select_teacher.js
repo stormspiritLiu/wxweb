@@ -1,5 +1,5 @@
 /**
- * Created by 刘柘林 on 2018/2/6.
+ * Created by 刘柘林 on 2018/2/10.
  */
 function search() {
     var post_data = {
@@ -7,32 +7,31 @@ function search() {
         category : $("#category li[data-selected='1']").text() || '全部'
     }
     $.ajax({
-        url: '/course',
+        url: '/teacher/select',
         data : post_data,
         dataType : 'json',
         type : 'post',
         success : function (res) {
             console.log(res);
             var str = "";
-            $.each(res.courses,function (index,item) {
+            $.each(res.teachers,function (index,item) {
                 str +=
                     "<div class=\"col-md-4 testimonial-grid\">" +
                         "<div class=\"testimonial-grd\">" +
-                            "<a href=\"/course/detail?cid="+ item.id +"\">" +
-                                "<i>"+item.title+"</i>" +
+                            "<a href=\"/teacher/detail?tid="+ item.id +"\">" +
+                                "<i>"+item.name+"</i>" +
                                 item.grade + "&nbsp;"+ item.category +
-                                "<br>参与人数：" + item.participants +
-                                "<br>教师:&nbsp;<span>"+res.t_name[index]+"</span>" +
+                                "<br>课程数量：" + res.t_cnt[index] +
                             "</a>" +
                             "<div class=\"testimonial-grd-pos\">" +
                                 "<span></span>" +
                             "</div>" +
                         "</div>" +
-                    "</div>";
+                     "</div>";
             })
-            if(str == "") str = "暂无课程"
+            if(str == "") str = "暂无老师"
 
-            $("#courses").html(str)
+            $("#teachers").html(str)
         }
     })
 }

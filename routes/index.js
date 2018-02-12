@@ -17,6 +17,7 @@ router.get('/index', function(req, res, next) {
 });
 
 router.use('/admin', controller.admin);
+router.use('/teacher', controller.teacher);
 router.use('/layout', controller.layout);
 router.use('/login', controller.login);
 router.use('/register', controller.register);
