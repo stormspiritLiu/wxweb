@@ -5,8 +5,11 @@ var express = require('express');
 var router =  express.Router();
 var Course = require('../models').Course;
 var Teacher = require('../models').Teacher;
+var Course_Remark = require('../models').Course_Remark;
+var Resource = require('../models').Resource;
 var async = require('async');
 
+//寻找课程以及查询课程
 router.get('/', function(req, res, next) {
     async.waterfall([
         function(callback){
@@ -29,9 +32,11 @@ router.get('/', function(req, res, next) {
             })
         },
     ], function (err, courses,t_name) {
+        var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('course/select_course',{
             courses:courses,
-            t_name:t_name
+            t_name:t_name,
+            user : user
         })
     });
 });
@@ -91,4 +96,41 @@ router.post('/', function(req, res, next) {
     // })
 });
 
+//课程详细页面
+router.get('/detail',function (req, res, next) {
+    var cid = parseInt(req.query.cid);
+    // console.log(cid);
+    async.waterfall([
+        function (callback) {
+            Course.findById(cid).then(function (course) {
+                callback(null,course)
+            })
+        },
+        function (course, callback) {
+            Course_Remark.findByCId(cid).then(function (remarks) {
+                callback(null,course,remarks);
+            })
+        },
+        function (course,remarks,callback) {
+            Resource.findByCId(cid).then(function (resources) {
+                console.log(resources[0].dataValues.create_time)
+                callback(null,course,remarks,resources);
+            })
+        },
+        function (course,remarks,resources,callback) {
+            Teacher.findById(course.t_id).then(function (teacher) {
+                callback(null,course,remarks,resources,teacher);
+            })
+        }
+    ],function (err, course,remarks,resources,teacher) {
+        var user = (req.session.student)?req.session.student:req.session.teacher
+        res.render('course/detail',{
+            course : course,
+            remarks : remarks,
+            resources: resources,
+            tea : teacher,
+            user : user
+        })
+    })
+});
 module.exports = router;

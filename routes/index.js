@@ -4,15 +4,15 @@ var controller = require('../controllers');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    var user = (req.session.student)?req.session.student:req.session.teacher
     res.render('index',{
-        student: req.session.student,
-        teacher: req.session.teacher
+        user : user
     });
 });
 router.get('/index', function(req, res, next) {
+    var user = (req.session.student)?req.session.student:req.session.teacher
     res.render('index',{
-        student: req.session.student,
-        teacher: req.session.teacher
+        user : user
     });
 });
 
@@ -22,5 +22,6 @@ router.use('/layout', controller.layout);
 router.use('/login', controller.login);
 router.use('/register', controller.register);
 router.use('/course', controller.course);
+router.use('/resource', controller.resource);
 
 module.exports = router;

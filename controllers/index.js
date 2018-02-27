@@ -7,3 +7,4 @@ exports.layout = require('./layout');
 exports.login = require('./login');
 exports.register = require('./register');
 exports.course = require('./course');
+exports.resource = require('./resource');

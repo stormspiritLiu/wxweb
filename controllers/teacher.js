@@ -35,9 +35,11 @@ router.get('/', function(req, res, next) {
 
         },
     ], function (err, teachers,t_cnt) {
+        var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('teacher/select_teacher',{
             teachers:teachers,
-            t_cnt : t_cnt
+            t_cnt : t_cnt,
+            user : user
         })
     });
 });

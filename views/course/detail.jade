@@ -1,3 +1,112 @@
 //
    Created by 刘柘林 on 2018/2/10.
+extends  ../layout
+-var course,remarks,resources,tea,user
 
+block content
+    .blog-page
+        .container
+            .blog-pag
+                .blog-page-grids
+                    .blog-page-grid
+                        h3 #{course.title}
+                        p
+                            | 教师：
+                            a(href='/teacher/detail?tid=' + '' + course.t_id + '') #{tea.name}
+                    .blog-page-grid1
+                        p #{course.mark} 评分 #{course.participants} 参与
+                    .clearfix
+            .grid_3.grid_5
+                .bs-example.bs-example-tabs
+                    ul.nav.nav-tabs
+                        li.active
+                            a(href='#information', data-toggle='tab') 基本信息
+                        //li
+                        //    a(href='#outline', data-toggle='tab') 课程大纲
+                        li
+                            a(href='#resource', data-toggle='tab') 课件资源
+                        li
+                            a(href='#remark', data-toggle='tab') 用户评论
+                    .tab-content
+                        #information.tab-pane.fade.in.active
+                            p #{course.information}
+                        //#outline.tab-pane.fade
+                        //    .bs-docs-example
+                        //        table.table
+                        //            thead
+                        //                tr
+                        //                    th #
+                        //                    th 章节名称
+                        //                    th 主讲老师
+                        //                    th 操作
+                        //            tbody
+                        //                tr
+                        //                    td 1
+                        //                    td 分式的基本概念与性质
+                        //                    td 武训
+                        //                    td
+                        //                        h4
+                        //                            a(href='#')
+                        //                                span.label.label-success 观看
+                        //                            a(href='#')
+                        //                                span.label.label-info 编辑
+                        //                            a(href='#')
+                        //                                span.label.label-danger 删除
+                        //                tr
+                        //                    td 2
+                        //                    td 分式的运算与恒等变形
+                        //                    td 武训
+                        //                    td
+                        //                        h4
+                        //                            a(href='#')
+                        //                                span.label.label-success 观看
+                        //                            a(href='#')
+                        //                                span.label.label-info 编辑
+                        //                            a(href='#')
+                        //                                span.label.label-danger 删除
+                        //                tr
+                        //                    td 3
+                        //                    td 分式方程
+                        //                    td 武训
+                        //                    td
+                        //                        h4
+                        //                            a(href='#')
+                        //                                span.label.label-success 观看
+                        //                            a(href='#')
+                        //                                span.label.label-info 编辑
+                        //                            a(href='#')
+                        //                                span.label.label-danger 删除
+                        #resource.tab-pane.fade
+                            -if(user && user.id == course.t_id)
+                                div
+                                    h3
+                                        a(href='#')
+                                            span.label.label-primary 上传
+                            .bs-docs-example
+                                table.table
+                                    thead
+                                        tr
+                                            th #
+                                            th 课件名称
+                                            th 上传时间
+                                            th 操作
+                                    tbody
+                                        each item,index in resources
+                                            tr
+                                                td #{index+1}
+                                                td #{item.name}
+                                                td #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
+                                                td
+                                                    h4
+                                                        a(href='/resource?id='+item.id+'&name='+item.name)
+                                                            span.label.label-success 下载
+                                                        -if(user && user.id == course.t_id)
+                                                            a(href='#')
+                                                                span.label.label-danger 删除
+                        #remark.tab-pane.fade
+                            .grid_3.grid_5
+                                each item,index in remarks
+                                    .well
+                                        | # #{index+1}
+                                        br
+                                        | #{item.information}

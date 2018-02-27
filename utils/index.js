@@ -10,10 +10,12 @@ exports.studentLoginSession = function (req, res, student) {
 };
 
 exports.studentLogoutSession = function (req) {
+    console.log("studentLogoutSession");
     return delete req.session.student;
 };
 
 exports.teacherLoginSession = function (req, res, teacher) {
+    console.log("teacherLoginSession");
     return req.session.teacher = {
         id: teacher.id,
         name: teacher.name
@@ -21,6 +23,7 @@ exports.teacherLoginSession = function (req, res, teacher) {
 };
 
 exports.teacherLogoutSession = function (req) {
+    console.log("teacherLogoutSession");
     return delete req.session.teacher;
 };
 

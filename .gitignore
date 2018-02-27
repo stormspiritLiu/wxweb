@@ -46,6 +46,8 @@ middlewares/
 migrations/
 seeders/
 
+public/resource/
+
 .idea/workspace.xml
 config/config.json
 .idea/rotkRegistration.iml
