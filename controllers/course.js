@@ -113,7 +113,6 @@ router.get('/detail',function (req, res, next) {
         },
         function (course,remarks,callback) {
             Resource.findByCId(cid).then(function (resources) {
-                console.log(resources[0].dataValues.create_time)
                 callback(null,course,remarks,resources);
             })
         },

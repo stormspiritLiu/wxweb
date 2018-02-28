@@ -28,7 +28,7 @@ app.use(session({
     secret: 'login',
     rolling: true,
     cookie: {
-      maxAge: 300*1000 //设置session过期时间5分钟
+      maxAge: 600*1000 //设置session过期时间10分钟
     },
     store: new redisStore({
         host: 'localhost',

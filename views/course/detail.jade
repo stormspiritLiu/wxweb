@@ -2,6 +2,8 @@
    Created by 刘柘林 on 2018/2/10.
 extends  ../layout
 -var course,remarks,resources,tea,user
+block script
+    script(src='/js/my_js/resource.js')
 
 block content
     .blog-page
@@ -79,9 +81,14 @@ block content
                         #resource.tab-pane.fade
                             -if(user && user.id == course.t_id)
                                 div
-                                    h3
-                                        a(href='#')
-                                            span.label.label-primary 上传
+                                    //form#upload_form(method='post', enctype='multipart/form-data')
+                                    //    button#upload_button(type='submit')
+                                    //        | 上传
+                                    //    input#upload_file(name='myfile', type='file', style='float:right;width: 200px;')
+
+                                    form(enctype='multipart/form-data', action='/resource/upload?cid='+course.id, method='post')
+                                        input(type='file', name='myfile', style='float:right;width: 200px;')
+                                        input(type='submit', value='提交')
                             .bs-docs-example
                                 table.table
                                     thead
@@ -92,16 +99,16 @@ block content
                                             th 操作
                                     tbody
                                         each item,index in resources
-                                            tr
+                                            tr(data-fid=item.id)
                                                 td #{index+1}
                                                 td #{item.name}
                                                 td #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
                                                 td
                                                     h4
-                                                        a(href='/resource?id='+item.id+'&name='+item.name)
+                                                        a(href='/resource?id='+item.id+'&name='+item.name+'&cid='+course.id)
                                                             span.label.label-success 下载
                                                         -if(user && user.id == course.t_id)
-                                                            a(href='#')
+                                                            a(href='#resource')
                                                                 span.label.label-danger 删除
                         #remark.tab-pane.fade
                             .grid_3.grid_5
