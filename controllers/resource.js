@@ -43,7 +43,7 @@ router.post('/upload', upload.single('myfile'),function(req, res, next) {
                 }
             }).then(function () {
                 console.log("----更新完成-------")
-                res.redirect('/');
+                res.redirect('/course/detail?cid='+ req.query.cid+'#resource');
             })
         }else{
             Resource.create({

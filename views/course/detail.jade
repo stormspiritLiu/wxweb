@@ -14,9 +14,12 @@ block content
                         h3 #{course.title}
                         p
                             | 教师：
-                            a(href='/teacher/detail?tid=' + '' + course.t_id + '') #{tea.name}
+                            a(href='/information/detail?tid=' + '' + course.t_id + '') #{tea.name}
                     .blog-page-grid1
-                        p #{course.mark} 评分 #{course.participants} 参与
+                        p  评分:&nbsp
+                            span.badge.badge-primary #{course.mark}
+                            |&nbsp参与人数:&nbsp
+                            span.badge.badge-primary #{course.participants}
                     .clearfix
             .grid_3.grid_5
                 .bs-example.bs-example-tabs
@@ -87,8 +90,9 @@ block content
                                     //    input#upload_file(name='myfile', type='file', style='float:right;width: 200px;')
 
                                     form(enctype='multipart/form-data', action='/resource/upload?cid='+course.id, method='post')
-                                        input(type='file', name='myfile', style='float:right;width: 200px;')
-                                        input(type='submit', value='提交')
+                                        button.btn.btn-default(type='submit',style='float:right') 提交
+                                        input(type='file', name='myfile', style='float:right;width: 200px;',required='')
+
                             .bs-docs-example
                                 table.table
                                     thead
@@ -108,7 +112,8 @@ block content
                                                         a(href='/resource?id='+item.id+'&name='+item.name+'&cid='+course.id)
                                                             span.label.label-success 下载
                                                         -if(user && user.id == course.t_id)
-                                                            a(href='#resource')
+                                                            |&nbsp
+                                                            a(href='javascript:void(0)')
                                                                 span.label.label-danger 删除
                         #remark.tab-pane.fade
                             .grid_3.grid_5

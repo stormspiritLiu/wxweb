@@ -5,7 +5,8 @@ exports.studentLoginSession = function (req, res, student) {
     console.log("studentLoginSession");
     return req.session.student = {
         id: student.id,
-        name: student.name
+        name: student.name,
+        state : student.state
     }
 };
 
@@ -18,7 +19,8 @@ exports.teacherLoginSession = function (req, res, teacher) {
     console.log("teacherLoginSession");
     return req.session.teacher = {
         id: teacher.id,
-        name: teacher.name
+        name: teacher.name,
+        state: teacher.state
     }
 };
 

@@ -8,6 +8,24 @@ var Teacher = require('../models').Teacher;
 var Course_Remark = require('../models').Course_Remark;
 var Resource = require('../models').Resource;
 var async = require('async');
+var path = require('path');
+var fs = require('fs')
+//文件夹删除
+function deleteall(path) {
+    var files = [];
+    if(fs.existsSync(path)) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file, index) {
+            var curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) { // recurse
+                deleteall(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
 
 //寻找课程以及查询课程
 router.get('/', function(req, res, next) {
@@ -39,9 +57,7 @@ router.get('/', function(req, res, next) {
             user : user
         })
     });
-});
-
-router.post('/', function(req, res, next) {
+}).post('/', function(req, res, next) {
     console.log(req.body);
 
     async.waterfall([
@@ -132,4 +148,56 @@ router.get('/detail',function (req, res, next) {
         })
     })
 });
+
+//创建一门新课
+router.post('/add_course',function (req, res, next) {
+    console.log('==============');
+    console.log(req.body);
+    Course.create({
+        t_id:req.session.teacher.id,
+        category:req.body.category,
+        grade:req.body.grade,
+        title:req.body.title,
+        information:req.body.information
+    }).then(function (course) {
+        var baseUrl = path.join(__dirname, '../public/resource/',course.id.toString());
+        if (!fs.existsSync(baseUrl)) {
+            fs.mkdirSync(baseUrl);
+        }
+        if(course) res.json({code:200,order:'add',course:course});
+        else res.json({code:404,message:'找不到该门课程'})
+    })
+})
+
+//更新课程
+router.post('/update',function (req, res, next) {
+    console.log('==============');
+    console.log(req.body);
+    Course.update({
+        category:req.body.category,
+        grade:req.body.grade,
+        title:req.body.title,
+        information:req.body.information
+    },{
+        where:{
+            id:req.query.cid
+        }
+    }).then(function (cnt) {
+        if(cnt) res.json({code:200,order:'update',course:req.body,cid:req.query.cid});
+        else res.json({code:404,message:'找不到该门课程'})
+    })
+})
+//课程删除
+router.get('/delete',function (req, res, next) {
+    console.log(req.query);
+    Course.destroy({
+        where:{
+            id:req.query.cid
+        }
+    }).then(function () {
+        deleteall(path.join(__dirname , '../public/resource/' , req.query.cid));
+        res.redirect('/information');
+    })
+})
+
 module.exports = router;

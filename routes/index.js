@@ -23,5 +23,6 @@ router.use('/login', controller.login);
 router.use('/register', controller.register);
 router.use('/course', controller.course);
 router.use('/resource', controller.resource);
+router.use('/information', controller.information);
 
 module.exports = router;
