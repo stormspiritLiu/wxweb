@@ -10,24 +10,19 @@ function start(){
     $("#category > option[selected='selected']").removeAttr('selected');
     $("#category > option:eq(0)").prop('selected','selected');
     $('#_information').val('')
-    $('#light').show();
-    $('#fade').show();
-}
-function closs(){
-    $('#light').hide();
-    $('#fade').hide();
+    $('#myModal').modal();
 }
 
 function edit(cid) {
     Url = "/course/update?cid="+cid;
+    $('#myModalLabel').text("更改课程信息");
     $('#title').val($('#'+cid+'>td:eq(1)').html())
     $("#grade > option[selected='selected']").removeAttr('selected');
     $("#grade > option[value="+$('#'+cid+'>td:eq(2)').text().toString()+"]").prop('selected','selected');
     $("#category > option[selected='selected']").removeAttr('selected');
     $("#category > option[value="+$('#'+cid+'>td:eq(3)').text().toString()+"]").prop('selected','selected');
     $('#_information').val($('#'+cid+'>td:eq(6)').html())
-    $('#light').show();
-    $('#fade').show();
+    $('#myModal').modal();
 }
 
 $(document).ready(function () {
@@ -41,7 +36,6 @@ $(document).ready(function () {
             type: 'post',
 
             success: function (res) {
-                closs();
                 if(res.code == 200 && res.order == 'add') {
                     var index = parseInt($('#course_list > tr:last > td:first').html()) + 1;
                     var str =

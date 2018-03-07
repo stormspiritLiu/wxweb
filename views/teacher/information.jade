@@ -84,48 +84,57 @@ block content
                                                                 |&nbsp
                                                             a(href='/course/delete?cid='+item.id)
                                                                 span.label.label-danger 删除
-                            #light.white_content
-                                .close
-                                    a(href='javascript:void(0)', onclick="closs()")  关闭
-                                div
-                                    form#new_course(method='post')
-                                        label(for='title') 课程名：
-                                        input.form-control#title(name='title', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
-                                        br
-                                        label(for='grade') 年　级：
-                                        select.form-control#grade(name='grade', style='width:50%;display:inline;margin:1px')
-                                            option(value='一年级') 一年级
-                                            option(value='二年级') 二年级
-                                            option(value='三年级') 三年级
-                                            option(value='四年级') 四年级
-                                            option(value='五年级') 五年级
-                                            option(value='六年级') 六年级
-                                            option(value='初一') 初一
-                                            option(value='初二') 初二
-                                            option(value='初三') 初三
-                                            option(value='高一') 高一
-                                            option(value='高二') 高二
-                                            option(value='高三') 高三
-                                        br
-                                        label(for='category') 科　目：
-                                        select.form-control#category(name='category', style='width:50%;display:inline;margin:1px')
-                                            option(value='语文') 语文
-                                            option(value='数学') 数学
-                                            option(value='外语') 外语
-                                            option(value='政治') 政治
-                                            option(value='历史') 历史
-                                            option(value='地理') 地理
-                                            option(value='物理') 物理
-                                            option(value='化学') 化学
-                                            option(value='生物') 生物
-                                            option(value='其他') 其他
-                                        br
-                                        label(for='_information') 课程描述：
-                                        br
-                                        textarea.form-control#_information(name='information', style='width:80%;display:inline;margin:1px', cols='60', rows='5', wrap='')
-                                        br
-                                        button.btn.btn-default#submit(type='submit') 提交
-                            #fade.black_overlay
+                            #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4#myModalLabel.modal-title 新建课程
+                                        .modal-body
+                                            div
+                                                form#new_course(method='post')
+                                                    label(for='title') 课程名：
+                                                    input.form-control#title(name='title', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                                                    br
+                                                    label(for='grade') 年　级：
+                                                    select.form-control#grade(name='grade', style='width:50%;display:inline;margin:1px')
+                                                        option(value='一年级') 一年级
+                                                        option(value='二年级') 二年级
+                                                        option(value='三年级') 三年级
+                                                        option(value='四年级') 四年级
+                                                        option(value='五年级') 五年级
+                                                        option(value='六年级') 六年级
+                                                        option(value='初一') 初一
+                                                        option(value='初二') 初二
+                                                        option(value='初三') 初三
+                                                        option(value='高一') 高一
+                                                        option(value='高二') 高二
+                                                        option(value='高三') 高三
+                                                    br
+                                                    label(for='category') 科　目：
+                                                    select.form-control#category(name='category', style='width:50%;display:inline;margin:1px')
+                                                        option(value='语文') 语文
+                                                        option(value='数学') 数学
+                                                        option(value='外语') 外语
+                                                        option(value='政治') 政治
+                                                        option(value='历史') 历史
+                                                        option(value='地理') 地理
+                                                        option(value='物理') 物理
+                                                        option(value='化学') 化学
+                                                        option(value='生物') 生物
+                                                        option(value='其他') 其他
+                                                    br
+                                                    label(for='_information') 课程描述：
+                                                    br
+                                                    textarea.form-control#_information(name='information', style='width:80%;display:inline;margin:1px', cols='60', rows='5', wrap='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#submit.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
 
                         #remark.tab-pane.fade
 
