@@ -2,15 +2,20 @@
  * Created by 刘柘林 on 2018/3/3.
  */
 var Url = "";
-function start(){
-    Url = "/course/add_course";
-    $('#title').val('')
-    $("#grade > option[selected='selected']").removeAttr('selected');
-    $("#grade > option:eq(0)").prop('selected','selected');
-    $("#category > option[selected='selected']").removeAttr('selected');
-    $("#category > option:eq(0)").prop('selected','selected');
-    $('#_information').val('')
-    $('#myModal').modal();
+function start(tag){
+    if(tag == 'myModal'){
+        Url = "/course/add_course";
+        $('#myModalLabel').text("新建课程");
+        $('#title').val('')
+        $("#grade > option[selected='selected']").removeAttr('selected');
+        $("#grade > option:eq(0)").prop('selected','selected');
+        $("#category > option[selected='selected']").removeAttr('selected');
+        $("#category > option:eq(0)").prop('selected','selected');
+        $('#_information').val('')
+        $('#myModal').modal();
+    }else {
+        $('#myModal1').modal();
+    }
 }
 
 function edit(cid) {
@@ -39,27 +44,27 @@ $(document).ready(function () {
                 if(res.code == 200 && res.order == 'add') {
                     var index = parseInt($('#course_list > tr:last > td:first').html()) + 1;
                     var str =
-                        "<tr>" +
-                        "<td>" + index + "</td>" +
-                        "<td>" + res.course.title + "</td>" +
-                        "<td>" + res.course.grade + "</td>" +
-                        "<td>" + res.course.category + "</td>" +
-                        "<td>" + res.course.mark + "</td>" +
-                        "<td>" + res.course.participants + "</td>" +
-                        "<td>" + res.course.information + "</td>" +
-                        "<td>" +
-                        "<h4>" +
-                        "<a href=\"/course/detail?cid=" + res.course.id + "\">" +
-                        "<span class=\"label label-primary\">进入</span>" + "&nbsp;" +
-                        "</a>" +
-                        "<a href=\"javascript:void(0)\" onclick=\"edit(" + res.course.id + ")\"></a>" +
-                        "<span class=\"label label-success\">编辑</span>" + "&nbsp;" +
-                        "</a>" +
-                        "<a href=\"/course/delete?cid=" + res.course.id + "\">" +
-                        "<span class=\"label label-danger\">删除</span>" +
-                        "</a>" +
-                        "</h4>" +
-                        "</td>" +
+                        "<tr id='"+res.course.id+"'>" +
+                            "<td>" + index + "</td>" +
+                            "<td>" + res.course.title + "</td>" +
+                            "<td>" + res.course.grade + "</td>" +
+                            "<td>" + res.course.category + "</td>" +
+                            "<td>" + res.course.mark + "</td>" +
+                            "<td>" + res.course.participants + "</td>" +
+                            "<td>" + res.course.information + "</td>" +
+                            "<td>" +
+                                "<h4>" +
+                                    "<a href=\"/course/detail?cid=" + res.course.id + "\">" +
+                                        "<span class=\"label label-primary\">进入</span>" + "&nbsp;" +
+                                    "</a>" +
+                                    "<a href=\"javascript:void(0)\" onclick=\"edit(" + res.course.id + ")\">" +
+                                        "<span class=\"label label-success\">编辑</span>" + "&nbsp;" +
+                                    "</a>" +
+                                    "<a href=\"/course/delete?cid=" + res.course.id + "\">" +
+                                        "<span class=\"label label-danger\">删除</span>" +
+                                    "</a>" +
+                                "</h4>" +
+                            "</td>" +
                         "</tr>"
                     $('#course_list').append(str);
                 }
@@ -79,4 +84,34 @@ $(document).ready(function () {
 
         })
     })
+    $("#remark_submit").click(function (event) {
+        event.preventDefault();
+
+        var searchURL = window.location.search;
+        searchURL = searchURL.substring(1, searchURL.length);
+        var tid = searchURL.split("&")[0].split("=")[1];
+        $.ajax({
+            url: '/remark/teacher?tid='+tid ,
+            data: $('#new_remark').serialize(),
+            dataType: 'json',
+            type: 'post',
+
+            success: function (res) {
+                console.log(res.remark)
+                var index = $('.well').length + 1;
+                var str = "<div class=\"well\">#" + index +
+                    "评分："+res.remark.mark+ "<br>" +res.remark.information +
+                    // "<div style='float: right;'>"+ res.remark.create_time.getFullYear() +
+                    // "-"+res.remark.create_time.getMonth()+1 +
+                    // "-"+res.remark.create_time.getDate() +"</div>"
+                "</div>"
+                $(".grid_3.grid_5:last").append(str)
+            },
+            error : function() {
+                alert("异常！");
+            }
+
+        })
+    })
+
 })

@@ -1,12 +1,15 @@
 /**
  * Created by 刘柘林 on 2018/1/28.
  */
+
+//session type字段：0为管理员，1为教师，2为学生
 exports.studentLoginSession = function (req, res, student) {
     console.log("studentLoginSession");
     return req.session.student = {
         id: student.id,
         name: student.name,
-        state : student.state
+        state: student.state,
+        type: 2
     }
 };
 
@@ -20,7 +23,8 @@ exports.teacherLoginSession = function (req, res, teacher) {
     return req.session.teacher = {
         id: teacher.id,
         name: teacher.name,
-        state: teacher.state
+        state: teacher.state,
+        type: 1
     }
 };
 
@@ -32,7 +36,8 @@ exports.teacherLogoutSession = function (req) {
 exports.adminLoginSession = function (req, res, admin) {
     return req.session.admin = {
         id: admin.id,
-        name: admin.name
+        name: admin.name,
+        type: 0
     }
 };
 

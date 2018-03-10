@@ -1,7 +1,7 @@
 //
    Created by 刘柘林 on 2018/3/3.
 extends  ../layout
--var teacher,courses
+-var teacher,courses,remarks
 block script
     script(src='/js/my_js/information.js')
 block content
@@ -15,7 +15,7 @@ block content
                 span.badge.badge-primary #{teacher.category}
                 |                评分：
                 span.badge.badge-success #{teacher.mark}
-                -if(user && user.id==teacher.id)
+                -if(user && user.type==1 && user.id==teacher.id)
                     a(href='/information/logout')
                         span.label.label-danger(style='float:right;font-size:20px;width: 70px;') 登出
             .grid_3.grid_5
@@ -23,7 +23,7 @@ block content
                     ul.nav.nav-tabs
                         li.active
                             a(href='#information', data-toggle='tab') 基本信息
-                        -if(user && user.id==teacher.id)
+                        -if(user && user.type==1 && user.id==teacher.id)
                             li
                                 a(href='#courses', data-toggle='tab') 我的课程
                         -else
@@ -46,9 +46,9 @@ block content
                                         p 状态:&nbsp&nbsp&nbsp&nbsp 未过审
                                     p 个人描述:&nbsp&nbsp&nbsp&nbsp #{teacher.information}
                         #courses.tab-pane.fade
-                            -if(user && user.id==teacher.id)
+                            -if(user && user.type==1 && user.id==teacher.id)
                                 div
-                                    a(href='javascript:void(0)', onclick="start()")
+                                    a(href='javascript:void(0)', onclick="start('myModal')")
                                         span.badge.badge-primary(style='font-size:20px') +新建课程
                             .bs-docs-example
                                 table.table
@@ -61,7 +61,7 @@ block content
                                             th 评分
                                             th 人数
                                             th 描述
-                                            -if(user && user.id==teacher.id)
+                                            -if(user && user.type==1 && user.id==teacher.id)
                                                 th 操作
                                     tbody#course_list
                                         each item,index in courses
@@ -73,7 +73,7 @@ block content
                                                 td #{item.mark}
                                                 td #{item.participants}
                                                 td #{item.information}
-                                                -if(user && user.id==teacher.id)
+                                                -if(user && user.type==1 && user.id==teacher.id)
                                                     td
                                                         h4
                                                             a(href='/course/detail?cid='+item.id)
@@ -135,6 +135,48 @@ block content
                                             button#submit.btn.btn-primary(type='button', data-dismiss='modal')
                                                 span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
                                                 | 保存
-
                         #remark.tab-pane.fade
+                            -if(user && user.type == 2)
+                                div
+                                    a(href='javascript:void(0)', onclick="start('myModal1')")
+                                        span.badge.badge-primary(style='font-size:20px') +评价教师
+                            .grid_3.grid_5
+                                -if(remarks.length==0)
+                                    p 暂无评论
+                                -else
+                                    each item,index in remarks
+                                        .well
+                                            | # #{index + 1}&nbsp&nbsp&nbsp&nbsp评分：#{item.mark}
+                                            br
+                                            | #{item.information}
+                                            div(style='float:right')
+                                                | #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
+                            #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4.modal-title 评价
+                                        .modal-body
+                                            form#new_remark(method='post')
+                                                label(for='mark') 评　分：
+                                                select#mark.form-control(name='mark', style='width:50%;display:inline;margin:1px')
+                                                    option(value='1') 1
+                                                    option(value='2') 2
+                                                    option(value='3') 3
+                                                    option(value='4') 4
+                                                    option(value='5') 5
+                                                br
+                                                label(for='r_information') 评　语：
+                                                br
+                                                textarea#r_information.form-control(name='information', style='width:80%;display:inline;margin:1px', cols='60', rows='5', wrap='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#remark_submit.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
+
 

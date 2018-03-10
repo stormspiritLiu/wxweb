@@ -9,3 +9,4 @@ exports.register = require('./register');
 exports.course = require('./course');
 exports.resource = require('./resource');
 exports.information = require('./information');
+exports.remark = require('./remark');

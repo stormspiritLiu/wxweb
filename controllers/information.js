@@ -6,6 +6,7 @@ var router =  express.Router();
 var Teacher = require('../models').Teacher;
 var Student = require('../models').Student;
 var Course = require('../models').Course;
+var Teacher_Remark = require('../models').Teacher_Remark;
 var async = require('async');
 var utils = require('../utils');
 var fs = require('fs');
@@ -27,11 +28,17 @@ function teacher_detail(tid,req,res) {
                 callback(null,teacher,courses)
             })
         },
-    ],function (err, teacher,courses) {
+        function (teacher,courses, callback) {
+            Teacher_Remark.findByTId(teacher.id).then(function (remarks) {
+                callback(null,teacher,courses,remarks)
+            })
+        },
+    ],function (err, teacher,courses,remarks) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('teacher/information',{
             teacher : teacher,
             courses : courses,
+            remarks : remarks,
             user : user
         })
     })
