@@ -1,7 +1,7 @@
 //
    Created by 刘柘林 on 2018/2/10.
 extends  ../layout
--var course,remarks,resources,tea,user
+-var course,remarks,resources,tea,user,join
 block script
     script(src='/js/my_js/resource.js')
 
@@ -20,8 +20,13 @@ block content
                             span.badge.badge-primary #{course.mark}
                             |&nbsp参与人数:&nbsp
                             span.badge.badge-primary #{course.participants}
+                        -if(join)
+                            span.label.label-success(style='float:right;font-size:20px;width: 110px;margin-top: 0.5em') 已加入课程
+                        -else if(!user || user.type == 2)
+                            a(href='/course/join?cid=' + course.id)
+                                span.label.label-info(style='float:right;font-size:20px;width: 110px;margin-top: 0.5em') 参加课程
                     .clearfix
-            .grid_3.grid_5
+            div
                 .bs-example.bs-example-tabs
                     ul.nav.nav-tabs
                         li.active

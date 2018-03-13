@@ -1,0 +1,72 @@
+//
+   Created by 刘柘林 on 2018/3/13.
+extends  ../layout
+-var student,courses,t_name
+block script
+    script(src='/js/my_js/information.js')
+block content
+    .typo
+        .container
+            p.my_title #{student.name}
+            p.my_title1
+                | 标签：
+                span.badge.badge-primary #{student.grade}
+                a(href='/information/logout')
+                    span.label.label-danger(style='float:right;font-size:20px;width: 70px;') 登出
+            .grid_3.grid_5
+                .bs-example.bs-example-tabs
+                    ul.nav.nav-tabs
+                        li.active
+                            a(href='#information', data-toggle='tab') 基本信息
+                        li
+                            a(href='#courses', data-toggle='tab') 我的课程
+                    .tab-content
+                        #information.tab-pane.fade.in.active
+                            .col-md-6
+                                table.table.table-bordered
+                                    p 账号:&nbsp&nbsp&nbsp&nbsp #{student.account}
+                                    p 姓名:&nbsp&nbsp&nbsp&nbsp #{student.name}
+                                    p 学校:&nbsp&nbsp&nbsp&nbsp #{student.school}
+                                    p 年级:&nbsp&nbsp&nbsp&nbsp #{student.grade}
+                                    -if(student.state==1)
+                                        p 状态:&nbsp&nbsp&nbsp&nbsp 已过审
+                                    -else
+                                        p 状态:&nbsp&nbsp&nbsp&nbsp 未过审
+                                    p 个人描述:&nbsp&nbsp&nbsp&nbsp #{student.information}
+                        #courses.tab-pane.fade
+                            -if(courses.length > 0)
+                                .bs-docs-example
+                                    table.table
+                                        thead
+                                            tr
+                                                th #
+                                                th 名称
+                                                th 教师
+                                                th 年级
+                                                th 科目
+                                                th 评分
+                                                th 人数
+                                                th 描述
+                                                th 操作
+                                        tbody#course_list
+                                            each item,index in courses
+                                                tr(id=item.id)
+                                                    td #{index+1}
+                                                    td #{item.title}
+                                                    td #{t_name[index]}
+                                                    td #{item.grade}
+                                                    td #{item.category}
+                                                    td #{item.mark}
+                                                    td #{item.participants}
+                                                    td #{item.information}
+                                                    td
+                                                        h4
+                                                            a(href='/course/detail?cid=' + item.id)
+                                                                span.label.label-primary 进入
+                                                                | &nbsp
+                                                            a(href='/course/quit?cid=' + item.id)
+                                                                span.label.label-danger 退出
+                            -else
+                                p 尚未参加任何课程
+
+

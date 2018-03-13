@@ -5,11 +5,12 @@ var express = require('express');
 var router =  express.Router();
 var Course = require('../models').Course;
 var Teacher = require('../models').Teacher;
+var Course_Student = require('../models').Course_Student;
 var Course_Remark = require('../models').Course_Remark;
 var Resource = require('../models').Resource;
 var async = require('async');
 var path = require('path');
-var fs = require('fs')
+var fs = require('fs');
 //文件夹删除
 function deleteall(path) {
     var files = [];
@@ -136,14 +137,32 @@ router.get('/detail',function (req, res, next) {
             Teacher.findById(course.t_id).then(function (teacher) {
                 callback(null,course,remarks,resources,teacher);
             })
+        },
+        function (course,remarks,resources,teacher,callback) {
+            if(req.session.student){
+                Course_Student.count({
+                    where : {
+                        c_id : course.id,
+                        s_id : req.session.student.id
+                    }
+                }).then(function (cnt) {
+                    if(cnt == 1)
+                        callback(null,course,remarks,resources,teacher,true);
+                    else
+                        callback(null,course,remarks,resources,teacher,false);
+                })
+            }
+            else
+                callback(null,course,remarks,resources,teacher,false);
         }
-    ],function (err, course,remarks,resources,teacher) {
+    ],function (err, course,remarks,resources,teacher,join) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('course/detail',{
             course : course,
             remarks : remarks,
             resources: resources,
             tea : teacher,
+            join : join,
             user : user
         })
     })
@@ -200,4 +219,26 @@ router.get('/delete',function (req, res, next) {
     })
 })
 
+
+//学生加入课程
+router.get('/join',function (req, res, next) {
+    if(!req.session.student) res.redirect('/login')
+    Course_Student.create({
+        c_id : req.query.cid,
+        s_id : req.session.student.id
+    }).then(function () {
+        res.redirect('/course/detail?cid='+req.query.cid)
+    })
+})
+//学生退出课程
+router.get('/quit',function (req, res, next) {
+    Course_Student.destroy({
+        where:{
+            c_id : req.query.cid,
+            s_id : req.session.student.id
+        }
+    }).then(function () {
+        res.redirect('/information')
+    })
+})
 module.exports = router;
