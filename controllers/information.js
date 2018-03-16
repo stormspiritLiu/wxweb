@@ -45,6 +45,7 @@ function teacher_detail(tid,req,res) {
     })
 }
 
+//老师与学生的信息页面展示
 router.get('/', function(req, res, next) {
     if(req.session.student){
         async.waterfall([
@@ -113,5 +114,110 @@ router.get('/detail',function (req,res,next) {
     teacher_detail(req.query.tid,req,res)
 })
 
+//学生编辑个人信息
+router.post('/update_info_stu',function (req, res, next) {
+    console.log(req.body);
+    Student.update({
+        name : req.body.name,
+        school : req.body.school,
+        grade : req.body.grade,
+        information : req.body.information==''?'什么都没写':req.body.information
+    },{
+        where:{
+            id : req.session.student.id
+        }
+    }).then(function () {
+        res.json({
+            name : req.body.name,
+            school : req.body.school,
+            grade : req.body.grade,
+            information : req.body.information==''?'什么都没写':req.body.information
+        })
+    })
+})
+
+//学生修改密码
+router.post('/update_password_stu',function (req, res, next) {
+    console.log(req.body);
+    if(req.body.new_password == req.body.confirm_password){
+        Student.count({
+            where:{
+                id : req.session.student.id,
+                password : req.body.old_password
+            }
+        }).then(function (cnt) {
+            if(cnt == 1){
+                Student.update({
+                    password : req.body.new_password
+                },{
+                    where:{
+                        id: req.session.student.id
+                    }
+                })
+                res.json({type : 1})
+            }else{
+                res.json({type : 2})
+            }
+        })
+    }else{
+        res.json({type : 3})
+    }
+
+
+})
+
+//教师编辑个人信息
+router.post('/update_info_tea',function (req, res, next) {
+    console.log(req.body);
+    Teacher.update({
+        name : req.body.name,
+        teaching_age : req.body.teaching_age,
+        information : req.body.information==''?'什么都没写':req.body.information,
+        grade : req.body.grade,
+        category : req.body.category
+    },{
+        where:{
+            id : req.session.teacher.id
+        }
+    }).then(function () {
+        res.json({
+            name : req.body.name,
+            teaching_age : req.body.teaching_age,
+            information : req.body.information==''?'什么都没写':req.body.information,
+            grade : req.body.grade,
+            category : req.body.category
+        })
+    })
+})
+
+//教师修改密码
+router.post('/update_password_tea',function (req, res, next) {
+    console.log(req.body);
+    if(req.body.new_password == req.body.confirm_password){
+        Teacher.count({
+            where:{
+                id : req.session.teacher.id,
+                password : req.body.old_password
+            }
+        }).then(function (cnt) {
+            if(cnt == 1){
+                Teacher.update({
+                    password : req.body.new_password
+                },{
+                    where:{
+                        id: req.session.teacher.id
+                    }
+                })
+                res.json({type : 1})
+            }else{
+                res.json({type : 2})
+            }
+        })
+    }else{
+        res.json({type : 3})
+    }
+
+
+})
 
 module.exports = router;

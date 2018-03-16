@@ -14,10 +14,10 @@ function start(tag){
         $('#_information').val('')
         $('#myModal').modal();
     }else {
-        $('#myModal1').modal();
+        $('#'+tag).modal();
     }
 }
-
+//编辑课程
 function edit(cid) {
     Url = "/course/update?cid="+cid;
     $('#myModalLabel').text("更改课程信息");
@@ -30,7 +30,47 @@ function edit(cid) {
     $('#myModal').modal();
 }
 
+//设置通知栏消息显示方式
+$(function() {
+    toastr.options = {
+        "closeButton": false, //是否显示关闭按钮
+        "debug": false, //是否使用debug模式
+        "showDuration": "300",//显示的动画时间
+        "hideDuration": "1000",//消失的动画时间
+        "timeOut": "3000", //展现时间
+        "showEasing": "swing",//显示时的动画缓冲方式
+        "hideEasing": "linear",//消失时的动画缓冲方式
+        "showMethod": "fadeIn",//显示时的动画方式
+        "hideMethod": "fadeOut" //消失时的动画方式
+    };
+})
+
+//按url更新密码
+function update_password(url) {
+    $.ajax({
+        url: url,
+        data: $('#update_password').serialize(),
+        dataType: 'json',
+        type: 'post',
+
+        success: function (res) {
+            if(res.type == 1){
+                toastr.success("修改成功")
+            }else if(res.type == 2){
+                toastr.error("原密码不正确");
+            }else if(res.type == 3){
+                toastr.warning("新密码前后不一致")
+            }
+        },
+        error : function() {
+            toastr.error("异常!")
+        }
+
+    })
+}
+
 $(document).ready(function () {
+    //新建、更新课程
     $("#submit").click(function (event) {
         event.preventDefault();
 
@@ -84,6 +124,7 @@ $(document).ready(function () {
 
         })
     })
+    //新建评论
     $("#remark_submit").click(function (event) {
         event.preventDefault();
 
@@ -113,5 +154,65 @@ $(document).ready(function () {
 
         })
     })
+    //更新学生个人信息
+    $("#update_info_submit_s").click(function (event) {
+        event.preventDefault();
 
+        $.ajax({
+            url: '/information/update_info_stu',
+            data: $('#update_info').serialize(),
+            dataType: 'json',
+            type: 'post',
+
+            success: function (res) {
+                toastr.success("修改成功")
+                $("#t_name").html(res.name)
+                $("#t_grade").html(res.grade)
+                $("#p_name").html("姓名:&emsp;" +res.name)
+                $("#p_school").html("学校:&emsp;" +res.school)
+                $("#p_grade").html("年级:&emsp;" +res.grade)
+                $("#p_information").html("个人描述:&emsp;" +res.information)
+            },
+            error : function() {
+                toastr.warn("异常!")
+            }
+
+        })
+    })
+    //更新学生密码
+    $("#update_password_submit_s").click(function (event) {
+        event.preventDefault();
+        update_password('/information/update_password_stu')
+    })
+    //更新教师个人信息
+    $("#update_info_submit_t").click(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: '/information/update_info_tea',
+            data: $('#update_info').serialize(),
+            dataType: 'json',
+            type: 'post',
+
+            success: function (res) {
+                console.log(res)
+                toastr.success("修改成功")
+                $("#t_name").html(res.name)
+                $("#t_grade").html(res.grade)
+                $("#t_category").html(res.category)
+                $("#p_name").html("姓名:&emsp;" +res.name)
+                $("#p_teaching_age").html("姓名:&emsp;" +res.teaching_age+"年")
+                $("#p_information").html("个人描述:&emsp;" +res.information)
+            },
+            error : function() {
+                toastr.warn("异常!")
+            }
+
+        })
+    })
+    //更新教师密码
+    $("#update_password_submit_t").click(function (event) {
+        event.preventDefault();
+        update_password('/information/update_password_tea')
+    })
 })

@@ -4,13 +4,15 @@ extends  ../layout
 -var student,courses,t_name
 block script
     script(src='/js/my_js/information.js')
+    script(src='/js/toastr.min.js')
+    link(href='/css/toastr.min.css', rel='stylesheet', type='text/css', media='all')
 block content
     .typo
         .container
-            p.my_title #{student.name}
+            p.my_title#t_name #{student.name}
             p.my_title1
                 | 标签：
-                span.badge.badge-primary #{student.grade}
+                span.badge.badge-primary#t_grade #{student.grade}
                 a(href='/information/logout')
                     span.label.label-danger(style='float:right;font-size:20px;width: 70px;') 登出
             .grid_3.grid_5
@@ -22,17 +24,94 @@ block content
                             a(href='#courses', data-toggle='tab') 我的课程
                     .tab-content
                         #information.tab-pane.fade.in.active
+                            div
+                                a(href='javascript:void(0)', onclick="start('info')")
+                                    span.badge.badge-primary(style='font-size:20px;margin:0 0 0.5em 0.5em') 编辑信息
+                                a(href='javascript:void(0)', onclick="start('password')")
+                                    span.badge.badge-warning(style='font-size:20px;margin:0 0 0.5em 0.5em') 修改密码
                             .col-md-6
                                 table.table.table-bordered
-                                    p 账号:&nbsp&nbsp&nbsp&nbsp #{student.account}
-                                    p 姓名:&nbsp&nbsp&nbsp&nbsp #{student.name}
-                                    p 学校:&nbsp&nbsp&nbsp&nbsp #{student.school}
-                                    p 年级:&nbsp&nbsp&nbsp&nbsp #{student.grade}
+                                    p#p_account 账号:&emsp;#{student.account}
+                                    p#p_name 姓名:&emsp;#{student.name}
+                                    p#p_school 学校:&emsp;#{student.school}
+                                    p#p_grade 年级:&emsp;#{student.grade}
                                     -if(student.state==1)
-                                        p 状态:&nbsp&nbsp&nbsp&nbsp 已过审
+                                        p 状态:&emsp;已过审
                                     -else
-                                        p 状态:&nbsp&nbsp&nbsp&nbsp 未过审
-                                    p 个人描述:&nbsp&nbsp&nbsp&nbsp #{student.information}
+                                        p 状态:&emsp;未过审
+                                    p#p_information 个人描述:&emsp;#{student.information}
+                            #info.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4#myModalLabel.modal-title 编辑信息
+                                        .modal-body
+                                            div
+                                                form#update_info(method='post')
+                                                    label 账　号：#{student.account}
+                                                    //input.form-control#account(name='account', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                                                    br
+                                                    label 姓　名：
+                                                    input.form-control(name='name', type='text', style='width:50%;display:inline;margin:1px',value=student.name, required='')
+                                                    br
+                                                    label 学　校：
+                                                    input.form-control(name='school', type='text', style='width:50%;display:inline;margin:1px', value=student.school,required='')
+                                                    br
+                                                    label 年　级：
+                                                    select.form-control(name='grade', style='width:50%;display:inline;margin:1px')
+                                                        option(value='一年级') 一年级
+                                                        option(value='二年级') 二年级
+                                                        option(value='三年级') 三年级
+                                                        option(value='四年级') 四年级
+                                                        option(value='五年级') 五年级
+                                                        option(value='六年级') 六年级
+                                                        option(value='初一') 初一
+                                                        option(value='初二') 初二
+                                                        option(value='初三') 初三
+                                                        option(value='高一') 高一
+                                                        option(value='高二') 高二
+                                                        option(value='高三') 高三
+                                                    br
+                                                    label(for='_information') 个人描述：
+                                                    br
+                                                    textarea.form-control#_information(name='information', style='width:80%;display:inline;margin:1px',placeholder=student.information, cols='60', rows='5', wrap='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#update_info_submit_s.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
+                            #password.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4.modal-title 修改密码
+                                        .modal-body
+                                            div
+                                                form#update_password(method='post')
+                                                    label 账　号：#{student.account}
+                                                    //input.form-control#account(name='account', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                                                    br
+                                                    label 原密码：
+                                                    input.form-control#old_password(name='old_password', type='password', style='width:50%;display:inline;margin:1px', required='')
+                                                    br
+                                                    label 新密码：
+                                                    input.form-control#new_password(name='new_password', type='password', style='width:50%;display:inline;margin:1px',required='')
+                                                    br
+                                                    label 确认密码：
+                                                    input.form-control#confirm_password(name='confirm_password', type='password', style='width:50%;display:inline;margin:1px',required='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#update_password_submit_s.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
                         #courses.tab-pane.fade
                             -if(courses.length > 0)
                                 .bs-docs-example
@@ -68,5 +147,3 @@ block content
                                                                 span.label.label-danger 退出
                             -else
                                 p 尚未参加任何课程
-
-

@@ -4,15 +4,17 @@ extends  ../layout
 -var teacher,courses,remarks
 block script
     script(src='/js/my_js/information.js')
+    script(src='/js/toastr.min.js')
+    link(href='/css/toastr.min.css', rel='stylesheet', type='text/css', media='all')
 block content
     .typo
         .container
-            p.my_title #{teacher.name}
+            p.my_title#t_name #{teacher.name}
             p.my_title1
                 | 标签：
-                span.badge.badge-primary #{teacher.grade}
+                span.badge.badge-primary#t_grade #{teacher.grade}
                 |&nbsp
-                span.badge.badge-primary #{teacher.category}
+                span.badge.badge-primary#t_category #{teacher.category}
                 |                评分：
                 span.badge.badge-success #{teacher.mark}
                 -if(user && user.type==1 && user.id==teacher.id)
@@ -33,18 +35,97 @@ block content
                             a(href='#remark', data-toggle='tab') 用户评论
                     .tab-content
                         #information.tab-pane.fade.in.active
+                            div
+                                a(href='javascript:void(0)', onclick="start('info')")
+                                    span.badge.badge-primary(style='font-size:20px;margin:0 0 0.5em 0.5em') 编辑信息
+                                a(href='javascript:void(0)', onclick="start('password')")
+                                    span.badge.badge-warning(style='font-size:20px;margin:0 0 0.5em 0.5em') 修改密码
                             .col-md-6
                                 table.table.table-bordered
-                                    p 账号:&nbsp&nbsp&nbsp&nbsp #{teacher.account}
-                                    p 姓名:&nbsp&nbsp&nbsp&nbsp #{teacher.name}
-                                    p 教龄:&nbsp&nbsp&nbsp&nbsp #{teacher.teaching_age}年
-                                    p 评分:&nbsp&nbsp&nbsp&nbsp #{teacher.mark}
-                                    p 热度:&nbsp&nbsp&nbsp&nbsp #{teacher.hot}
+                                    p 账号:&emsp;#{teacher.account}
+                                    p#p_name 姓名:&emsp;#{teacher.name}
+                                    p#p_teaching_age 教龄:&emsp;#{teacher.teaching_age}年
+                                    p 评分:&emsp;#{teacher.mark}
+                                    p 热度:&emsp;#{teacher.hot}
                                     -if(teacher.state==1)
-                                        p 状态:&nbsp&nbsp&nbsp&nbsp 已过审
+                                        p 状态:&emsp;已过审
                                     -else
-                                        p 状态:&nbsp&nbsp&nbsp&nbsp 未过审
-                                    p 个人描述:&nbsp&nbsp&nbsp&nbsp #{teacher.information}
+                                        p 状态:&emsp;未过审
+                                    p#p_information 个人描述:&emsp;#{teacher.information}
+                            #info.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4.modal-title 编辑信息
+                                        .modal-body
+                                            div
+                                                form#update_info(method='post')
+                                                    label 账　号：#{teacher.account}
+                                                    //input.form-control#account(name='account', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                                                    br
+                                                    label 姓　名：
+                                                    input.form-control(name='name', type='text', style='width:50%;display:inline;margin:1px',value=teacher.name, required='')
+                                                    br
+                                                    label 教　龄：
+                                                    input.form-control(name='teaching_age', type='text', style='width:50%;display:inline;margin:1px',onKeyUp="value=value.replace(/[^\\d]/g,'')",value=teacher.teaching_age, required='')
+                                                    br
+                                                    label 标　签：
+                                                    select.form-control(name='grade', style='width:40%;display:inline;margin:1px')
+                                                        option(value='小学') 小学
+                                                        option(value='初中') 初中
+                                                        option(value='高中') 高中
+                                                    select.form-control(name='category', style='width:40%;display:inline;margin:1px')
+                                                        option(value='语文') 语文
+                                                        option(value='数学') 数学
+                                                        option(value='外语') 外语
+                                                        option(value='政治') 政治
+                                                        option(value='历史') 历史
+                                                        option(value='地理') 地理
+                                                        option(value='物理') 物理
+                                                        option(value='化学') 化学
+                                                        option(value='生物') 生物
+                                                        option(value='其他') 其他
+                                                    br
+                                                    label(for='_information') 个人描述：
+                                                    br
+                                                    textarea.form-control#self_information(name='information', style='width:80%;display:inline;margin:1px',placeholder=teacher.information, cols='60', rows='5', wrap='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#update_info_submit_t.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
+                            #password.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                                .modal-dialog(role='document')
+                                    .modal-content
+                                        .modal-header
+                                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                            h4.modal-title 修改密码
+                                        .modal-body
+                                            div
+                                                form#update_password(method='post')
+                                                    label 账　号：#{teacher.account}
+                                                    //input.form-control#account(name='account', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                                                    br
+                                                    label 原密码：
+                                                    input.form-control#old_password(name='old_password', type='password', style='width:50%;display:inline;margin:1px', required='')
+                                                    br
+                                                    label 新密码：
+                                                    input.form-control#new_password(name='new_password', type='password', style='width:50%;display:inline;margin:1px',required='')
+                                                    br
+                                                    label 确认密码：
+                                                    input.form-control#confirm_password(name='confirm_password', type='password', style='width:50%;display:inline;margin:1px',required='')
+                                        .modal-footer
+                                            button.btn.btn-default(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                                | 关闭
+                                            button#update_password_submit_t.btn.btn-primary(type='button', data-dismiss='modal')
+                                                span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                                | 保存
                         #courses.tab-pane.fade
                             -if(user && user.type==1 && user.id==teacher.id)
                                 div
@@ -178,5 +259,3 @@ block content
                                             button#remark_submit.btn.btn-primary(type='button', data-dismiss='modal')
                                                 span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
                                                 | 保存
-
-
