@@ -4,8 +4,7 @@ extends  ../layout
 -var teacher,courses,remarks
 block script
     script(src='/js/my_js/information.js')
-    script(src='/js/toastr.min.js')
-    link(href='/css/toastr.min.css', rel='stylesheet', type='text/css', media='all')
+
 block content
     .typo
         .container
@@ -52,7 +51,7 @@ block content
                                     -else
                                         p 状态:&emsp;未过审
                                     p#p_information 个人描述:&emsp;#{teacher.information}
-                            #info.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                            #info.modal.fade(tabindex='-1', role='dialog', aria-labelledby='info')
                                 .modal-dialog(role='document')
                                     .modal-content
                                         .modal-header
@@ -98,7 +97,7 @@ block content
                                             button#update_info_submit_t.btn.btn-primary(type='button', data-dismiss='modal')
                                                 span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
                                                 | 保存
-                            #password.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                            #password.modal.fade(tabindex='-1', role='dialog', aria-labelledby='password')
                                 .modal-dialog(role='document')
                                     .modal-content
                                         .modal-header
@@ -165,7 +164,7 @@ block content
                                                                 |&nbsp
                                                             a(href='/course/delete?cid='+item.id)
                                                                 span.label.label-danger 删除
-                            #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                            #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal')
                                 .modal-dialog(role='document')
                                     .modal-content
                                         .modal-header
@@ -232,7 +231,7 @@ block content
                                             | #{item.information}
                                             div(style='float:right')
                                                 | #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
-                            #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                            #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal1')
                                 .modal-dialog(role='document')
                                     .modal-content
                                         .modal-header

@@ -6,6 +6,7 @@ exports.Student = require('./student');
 exports.Teacher = require('./teacher');
 exports.Course = require('./course');
 exports.Resource = require('./resource');
+exports.Course_Outline = require('./course_outline');
 exports.Course_Remark = require('./course_remark');
 exports.Course_Student = require('./course_student');
 exports.Teacher_Remark = require('./teacher_remark');

@@ -5,8 +5,9 @@ var express = require('express');
 var router =  express.Router();
 var Course = require('../models').Course;
 var Teacher = require('../models').Teacher;
-var Course_Student = require('../models').Course_Student;
+var Course_Outline = require('../models').Course_Outline;
 var Course_Remark = require('../models').Course_Remark;
+var Course_Student = require('../models').Course_Student;
 var Resource = require('../models').Resource;
 var async = require('async');
 var path = require('path');
@@ -58,7 +59,8 @@ router.get('/', function(req, res, next) {
             user : user
         })
     });
-}).post('/', function(req, res, next) {
+})
+router.post('/', function(req, res, next) {
     console.log(req.body);
 
     async.waterfall([
@@ -154,8 +156,13 @@ router.get('/detail',function (req, res, next) {
             }
             else
                 callback(null,course,remarks,resources,teacher,false);
+        },
+        function (course,remarks,resources,teacher,join,callback) {
+            Course_Outline.findByCId(course.id).then(function (outlines) {
+                callback(null,course,remarks,resources,teacher,join,outlines);
+            })
         }
-    ],function (err, course,remarks,resources,teacher,join) {
+    ],function (err, course,remarks,resources,teacher,join,outlines) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('course/detail',{
             course : course,
@@ -163,6 +170,7 @@ router.get('/detail',function (req, res, next) {
             resources: resources,
             tea : teacher,
             join : join,
+            outlines : outlines,
             user : user
         })
     })
@@ -206,6 +214,23 @@ router.post('/update',function (req, res, next) {
         else res.json({code:404,message:'找不到该门课程'})
     })
 })
+
+//课程大纲信息更新
+router.post('/outline_update',function (req, res, next) {
+    console.log('==============');
+    console.log(req.body);
+    Course_Outline.update({title : req.body.new_title},{
+        where: {
+            id:req.body.id
+        }
+    }).then(function () {
+        res.json({
+            id : req.body.id,
+            new_title : req.body.new_title
+        })
+    })
+})
+
 //课程删除
 router.get('/delete',function (req, res, next) {
     console.log(req.query);
@@ -222,14 +247,17 @@ router.get('/delete',function (req, res, next) {
 
 //学生加入课程
 router.get('/join',function (req, res, next) {
-    if(!req.session.student) res.redirect('/login')
-    Course_Student.create({
-        c_id : req.query.cid,
-        s_id : req.session.student.id
-    }).then(function () {
-        res.redirect('/course/detail?cid='+req.query.cid)
-    })
+    if(!req.session.student) res.redirect('/login');
+    else{
+        Course_Student.create({
+            c_id : req.query.cid,
+            s_id : req.session.student.id
+        }).then(function () {
+            res.redirect('/course/detail?cid='+req.query.cid)
+        })
+    }
 })
+
 //学生退出课程
 router.get('/quit',function (req, res, next) {
     Course_Student.destroy({
@@ -241,4 +269,6 @@ router.get('/quit',function (req, res, next) {
         res.redirect('/information')
     })
 })
+
+
 module.exports = router;

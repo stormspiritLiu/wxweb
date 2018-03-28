@@ -1,10 +1,12 @@
 //
    Created by 刘柘林 on 2018/2/10.
 extends  ../layout
--var course,remarks,resources,tea,user,join
+-var course,remarks,resources,outlines,tea,user,join
 block script
     script(src='/js/my_js/resource.js')
-
+    script(src='/js/fileinput.js')
+    script(src='/js/zh.js')
+    link(href='/css/fileinput.css', rel='stylesheet', type='text/css', media='all')
 block content
     .blog-page
         .container
@@ -31,8 +33,8 @@ block content
                     ul.nav.nav-tabs
                         li.active
                             a(href='#information', data-toggle='tab') 基本信息
-                        //li
-                        //    a(href='#outline', data-toggle='tab') 课程大纲
+                        li
+                            a(href='#outline', data-toggle='tab') 课程大纲
                         li
                             a(href='#resource', data-toggle='tab') 课件资源
                         li
@@ -40,63 +42,92 @@ block content
                     .tab-content
                         #information.tab-pane.fade.in.active
                             p #{course.information}
-                        //#outline.tab-pane.fade
-                        //    .bs-docs-example
-                        //        table.table
-                        //            thead
-                        //                tr
-                        //                    th #
-                        //                    th 章节名称
-                        //                    th 主讲老师
-                        //                    th 操作
-                        //            tbody
-                        //                tr
-                        //                    td 1
-                        //                    td 分式的基本概念与性质
-                        //                    td 武训
-                        //                    td
-                        //                        h4
-                        //                            a(href='#')
-                        //                                span.label.label-success 观看
-                        //                            a(href='#')
-                        //                                span.label.label-info 编辑
-                        //                            a(href='#')
-                        //                                span.label.label-danger 删除
-                        //                tr
-                        //                    td 2
-                        //                    td 分式的运算与恒等变形
-                        //                    td 武训
-                        //                    td
-                        //                        h4
-                        //                            a(href='#')
-                        //                                span.label.label-success 观看
-                        //                            a(href='#')
-                        //                                span.label.label-info 编辑
-                        //                            a(href='#')
-                        //                                span.label.label-danger 删除
-                        //                tr
-                        //                    td 3
-                        //                    td 分式方程
-                        //                    td 武训
-                        //                    td
-                        //                        h4
-                        //                            a(href='#')
-                        //                                span.label.label-success 观看
-                        //                            a(href='#')
-                        //                                span.label.label-info 编辑
-                        //                            a(href='#')
-                        //                                span.label.label-danger 删除
+                        #outline.tab-pane.fade
+                            // -if(user && user.type == 2 && user.id == tea.id)
+                            .bs-docs-example
+                                -if(user && user.type==1 && user.id == course.t_id)
+                                    div
+                                        button.btn.btn-primary(type='button', data-toggle='modal', data-target='#exampleModal')
+                                            | 上传视频
+                                        // Modal
+                                        #exampleModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel')
+                                            .modal-dialog(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                            span(aria-hidden='true') ×
+                                                        h4.modal-title 上传视频
+                                                    .modal-body
+                                                        .file-loading
+                                                            input#input-video(name='video', multiple='', type='file')
+                                table.table
+                                    thead
+                                        tr
+                                            th #
+                                            -if(user && user.type == 1 && user.id == tea.id)
+                                                th 文件名
+                                            th 章节名称
+                                            th 操作
+                                    tbody#t_video
+                                        each item,index in outlines
+                                            tr(data-fid=item.id)
+                                                td #{index+1}
+                                                -if(user && user.type == 1 && user.id == tea.id)
+                                                    td #{item.f_name}
+                                                td #{item.title}
+                                                td
+                                                    h4
+                                                        //a(href='/video/test')
+                                                        a(href='/video?cid=' + item.c_id+'&&vid=' + item.id)
+                                                            span.label.label-success 观看
+                                                            | &nbsp;
+                                                        -if(user && user.type == 1 && user.id == tea.id)
+                                                            a(href='#')
+                                                                span.label.label-info 编辑
+                                                                | &nbsp;
+                                                            a(href='#')
+                                                                span.label.label-danger 删除
+                                        // Modal
+                                        #edit.modal.fade(tabindex='-1', role='dialog', aria-labelledby='edit')
+                                            .modal-dialog(role='document')
+                                                .modal-content
+                                                    .modal-header
+                                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                            span(aria-hidden='true') ×
+                                                        h4.modal-title 编辑大纲信息
+                                                    .modal-body
+                                                        div
+                                                            form#update_info(method='post')
+                                                                label#old_title
+                                                                br
+                                                                label 现标题：
+                                                                input.form-control#new_title(name='new_title', type='text', maxlength="30", style='width:50%;display:inline;margin:1px', required='')
+                                                    .modal-footer
+                                                        button.btn.btn-secondary(type='button', data-dismiss='modal') 关闭
+                                                        button.btn.btn-primary#edit_submit(type='button', title='Your custom upload logic') 保存
+
                         #resource.tab-pane.fade
-                            -if(user && user.id == course.t_id)
+                            -if(user && user.type==1 && user.id == course.t_id)
                                 div
                                     //form#upload_form(method='post', enctype='multipart/form-data')
                                     //    button#upload_button(type='submit')
                                     //        | 上传
                                     //    input#upload_file(name='myfile', type='file', style='float:right;width: 200px;')
-
-                                    form(enctype='multipart/form-data', action='/resource/upload?cid='+course.id, method='post')
-                                        button.btn.btn-default(type='submit',style='float:right') 提交
-                                        input(type='file', name='myfile', style='float:right;width: 200px;',required='')
+                                    button.btn.btn-primary(type='button', data-toggle='modal', data-target='#exampleModal2')
+                                        | 上传课件
+                                    #exampleModal2.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabe2')
+                                        .modal-dialog(role='document')
+                                            .modal-content
+                                                .modal-header
+                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                        span(aria-hidden='true') ×
+                                                    h4.modal-title 上传课件
+                                                .modal-body
+                                                    .file-loading
+                                                        input#input-resource(name='myfile', multiple='', type='file')
+                                    //form(enctype='multipart/form-data', action='/resource/upload?cid='+course.id, method='post')
+                                    //    button.btn.btn-default(type='submit',style='float:right') 提交
+                                    //    input(type='file', name='myfile', style='float:right;width: 200px;',required='')
 
                             .bs-docs-example
                                 table.table
@@ -106,7 +137,7 @@ block content
                                             th 课件名称
                                             th 上传时间
                                             th 操作
-                                    tbody
+                                    tbody#t_resource
                                         each item,index in resources
                                             tr(data-fid=item.id)
                                                 td #{index+1}
@@ -116,16 +147,16 @@ block content
                                                     h4
                                                         a(href='/resource?id='+item.id+'&name='+item.name+'&cid='+course.id)
                                                             span.label.label-success 下载
-                                                        -if(user && user.id == course.t_id)
+                                                        -if(user && user.type==1 && user.id == course.t_id)
                                                             |&nbsp
                                                             a(href='javascript:void(0)')
                                                                 span.label.label-danger 删除
 
                         #remark.tab-pane.fade
-                            -if(user && user.type == 2)
+                            -if(user && user.type == 2 && join)
                                 div
-                                    a(href='javascript:void(0)', onclick="start('myModal1')")
-                                        span.badge.badge-primary(style='font-size:20px') +评价教师
+                                    button.btn.btn-primary(type='button', data-toggle='modal', data-target='#myModal1')
+                                        | 评价老师
                             .grid_3.grid_5
                                 -if(remarks.length==0)
                                     p 暂无评论
@@ -137,7 +168,7 @@ block content
                                             | #{item.information}
                                             div(style='float:right')
                                                 | #{item.create_time.getFullYear()}-#{item.create_time.getMonth() + 1}-#{item.create_time.getDate()}
-                            #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+                            #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal1')
                                 .modal-dialog(role='document')
                                     .modal-content
                                         .modal-header

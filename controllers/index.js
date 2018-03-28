@@ -10,3 +10,4 @@ exports.course = require('./course');
 exports.resource = require('./resource');
 exports.information = require('./information');
 exports.remark = require('./remark');
+exports.video = require('./video');
