@@ -58,8 +58,8 @@ $(document).ready(function () {
         language: 'zh',
         //elErrorContainer: '#kartik-file-errors',
         previewFileType: ['video'],
-        //html5 video允许的视频后缀
-        allowedFileExtensions : ['mp4','webm','ogg'],
+        //jwplayer允许的视频后缀
+        allowedFileExtensions : ['mp4','wmv','webm','ogg','mov','f4v','flv','3gp','3g2','aac','ogv','wav','m4a'],
         enctype: 'multipart/form-data',
         maxFileCount: 5, //表示允许同时上传的最大文件个数
         uploadUrl: '/resource/video?cid=' + cid

@@ -4,6 +4,7 @@
 var express = require('express');
 var router =  express.Router();
 var Teacher = require('../models').Teacher;
+var Student = require('../models').Student;
 var Course = require('../models').Course;
 var async = require('async');
 
@@ -83,4 +84,28 @@ router.post('/select',function (req, res, next) {
     });
 })
 
+router.post('/authorize', function (req, res, next) {
+    console.log(req.body)
+    Student.update({
+        state: 1,
+        access_type : 1,
+        access_id : req.session.teacher.id
+    },{
+        where : {id : req.body.id}
+    }).then(function (value) {
+        if(value == 1){
+            Teacher.update({
+                access_num : req.body.num - 1
+            },{
+                where : {id : req.session.teacher.id}
+            }).then(function () {
+                res.json({
+                    id : req.body.id
+                })
+            })
+        }else{
+            res.end()
+        }
+    })
+})
 module.exports = router;

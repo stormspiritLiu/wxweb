@@ -1,0 +1,20 @@
+extends layout
+-var file
+block script
+    script(type='text/javascript', src='/js/jwplayer.js')
+    script(type='text/javascript', src='/js/jwplayer.html5.js')
+block content
+        #playerzmblbkjP_wrapper(data-path=file, style='width:1000px;height:500px;position:relative;margin-left: auto; margin-right: auto;')
+            object#playerzmblbkjP(name='playerzmblbkjP', width='100%', height='100%', classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000', style='position:absolute;top:0;left:0;')
+                param(name='movie', value='jwplayer.flash.swf')
+                param(name='src', value='jwplayer.flash.swf')
+                param(name='AllowScriptAccess', value='always')
+        script(type='text/javascript').
+            jwplayer('playerzmblbkjP').setup({
+                file: $('#playerzmblbkjP_wrapper').attr("data-path"),
+                flashplayer: 'jwplayer.flash.swf',
+                width: '700px',
+                aspectratio: '16:9',
+                fallback: 'false',
+                primary: jwplayer.utils.isChrome() ? "flash" : "html5"
+            });

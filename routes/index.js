@@ -25,6 +25,7 @@ router.use('/course', controller.course);
 router.use('/resource', controller.resource);
 router.use('/remark', controller.remark);
 router.use('/information', controller.information);
-router.use('/video', controller.video);
+router.use('/video', controller.jwplayer);
+router.use('/jwplayer', controller.jwplayer);
 
 module.exports = router;

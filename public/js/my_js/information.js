@@ -174,7 +174,7 @@ $(document).ready(function () {
                 $("#p_information").html("个人描述:&emsp;" +res.information)
             },
             error : function() {
-                toastr.warn("异常!")
+                toastr.warning("异常!")
             }
 
         })
@@ -205,7 +205,7 @@ $(document).ready(function () {
                 $("#p_information").html("个人描述:&emsp;" +res.information)
             },
             error : function() {
-                toastr.warn("异常!")
+                toastr.warning("异常!")
             }
 
         })
@@ -214,5 +214,30 @@ $(document).ready(function () {
     $("#update_password_submit_t").click(function (event) {
         event.preventDefault();
         update_password('/information/update_password_tea')
+    })
+    //教师对学生进行审核
+    $(".label.label-success ").click(function () {
+        var num = $("#p_num").text().replace(/[^0-9]/ig,"")
+        $.ajax({
+            url: '/teacher/authorize',
+            data: {
+                id : $(this).parents("tr").attr("id"),
+                num : num
+            },
+            dataType: 'json',
+            type: 'post',
+
+            success: function (res) {
+                console.log(res)
+                $("tr[id = "+ res.id +"]").children('td:eq(6)').html("已过审");
+                $("tr[id = "+ res.id +"]").children('td:last').html("无");
+                $("#p_num").text("你还剩余"+(num-1)+"个审核名额")
+                toastr.success("修改成功")
+            },
+            error : function() {
+                toastr.warning("异常!")
+            }
+
+        })
     })
 })

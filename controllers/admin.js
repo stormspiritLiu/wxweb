@@ -25,11 +25,16 @@ router.get('/student', function (req, res, next) {
             students:students
         })
     })
-}).post('/student',function (req, res, nexr) {
+})
+
+//通过学生信息
+router.post('/student',function (req, res, nexr) {
     console.log("+++++++++");
     console.log(req.body);
     Student.update({
-        state: req.body.state
+        state: req.body.state,
+        access_type : 0,
+        access_id : req.session.admin.id
     },{
         where : {account:req.body.account}
     })
@@ -52,7 +57,10 @@ router.get('/teacher', function (req, res, next) {
             teachers:teachers
         })
     })
-}).post('/teacher',function (req, res, nexr) {
+})
+
+//通过教师信息
+router.post('/teacher',function (req, res, next) {
     console.log("---------");
     console.log(req.body);
     Teacher.update({
@@ -66,6 +74,19 @@ router.get('/teacher', function (req, res, next) {
             id : tea.id
         });
     })
-});;
-
+});
+router.post('/authorize',function (req, res, next) {
+    console.log(req.body);
+    Teacher.update({
+        access_num: parseInt(req.body.add_num) + parseInt(req.body.remain_num)
+    },{
+        where : {id : req.body.id}
+    }).then(function (value) {
+        if(value == 1){
+            res.json({
+                new_num : parseInt(req.body.add_num) + parseInt(req.body.remain_num)
+            })
+        }
+    })
+})
 module.exports = router;

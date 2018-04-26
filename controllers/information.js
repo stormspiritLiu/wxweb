@@ -34,12 +34,22 @@ function teacher_detail(tid,req,res) {
                 callback(null,teacher,courses,remarks)
             })
         },
-    ],function (err, teacher,courses,remarks) {
+        function (teacher,courses,remarks,callback) {
+            Student.findAll({
+                where : {
+                    school : teacher.school
+                }
+            }).then(function (students) {
+                callback(null,teacher,courses,remarks,students)
+            })
+        }
+    ],function (err, teacher,courses,remarks,students) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('teacher/information',{
             teacher : teacher,
             courses : courses,
             remarks : remarks,
+            students: students,
             user : user
         })
     })

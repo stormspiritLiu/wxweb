@@ -11,25 +11,40 @@ module.exports = function(sequelize, DataTypes) {
             autoIncrement: true
         },
         account: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         password: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         school:{
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         grade:{
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        class:{
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         name:{
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         state:{
             type: DataTypes.INTEGER
         },
         information:{
             type: DataTypes.TEXT
+        },
+        access_type:{
+            type: DataTypes.INTEGER
+        },
+        access_id:{
+            type: DataTypes.INTEGER
         }
     },{
         underscore: true,

@@ -14,24 +14,53 @@ block content
                     tr
                         th #
                         th 账号
+                        th 学校
                         th 教育对象
                         th 科目
                         th 姓名
                         th 状态
+                        th 授权名额
                         th 操作
                 tbody
                     each tea,idx in teachers
-                        tr(id = tea.id)
+                        tr(id = tea.id,data-remain_num = tea.access_num)
                             td #{idx + 1}
                             td #{tea.account}
+                            td #{tea.school}
                             td #{tea.grade}
                             td #{tea.category}
                             td #{tea.name}
+
                             -if(tea.state == 1)
                                 td 已过审
+                                td
+                                    span.label.label-info 编辑
                                 td
                                     span.label.label-danger 封禁
                             -else
                                 td 未过审
                                 td
+                                    span.label.label-info 编辑
+                                td
                                     span.label.label-success 通过
+                #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal')
+                    .modal-dialog(role='document')
+                        .modal-content
+                            .modal-header
+                                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                    span(aria-hidden='true') ×
+                                h4#myModalLabel.modal-title 授权名额
+                            .modal-body
+                                div
+                                    form#authorize(method='post')
+                                        label#remain_num
+                                        br
+                                        label(for='add_num') 增加名额：
+                                        input.form-control#add_num(name='add_num',onKeyUp="value=value.replace(/[^\\d]/g,'')", type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', required='')
+                            .modal-footer
+                                button.btn.btn-default(type='button', data-dismiss='modal')
+                                    span.glyphicon.glyphicon-remove(aria-hidden='true')
+                                    | 关闭
+                                button#submit.btn.btn-primary(type='button', data-dismiss='modal')
+                                    span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
+                                    | 保存

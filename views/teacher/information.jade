@@ -1,7 +1,7 @@
 //
    Created by 刘柘林 on 2018/3/3.
 extends  ../layout
--var teacher,courses,remarks
+-var teacher,courses,remarks,students
 block script
     script(src='/js/my_js/information.js')
 
@@ -30,6 +30,9 @@ block content
                         -else
                             li
                                 a(href='#courses', data-toggle='tab') TA的课程
+                        -if(user && user.type==1 && user.id==teacher.id)
+                            li
+                                a(href='#authorize', data-toggle='tab') 学生审核
                         li
                             a(href='#remark', data-toggle='tab') 用户评论
                     .tab-content
@@ -141,8 +144,7 @@ block content
                                             th 评分
                                             th 人数
                                             th 描述
-                                            -if(user && user.type==1 && user.id==teacher.id)
-                                                th 操作
+                                            th 操作
                                     tbody#course_list
                                         each item,index in courses
                                             tr(id=item.id)
@@ -153,17 +155,18 @@ block content
                                                 td #{item.mark}
                                                 td #{item.participants}
                                                 td #{item.information}
-                                                -if(user && user.type==1 && user.id==teacher.id)
-                                                    td
-                                                        h4
-                                                            a(href='/course/detail?cid='+item.id)
-                                                                span.label.label-primary 进入
-                                                                |&nbsp
-                                                            a(href='javascript:void(0)',onclick="edit("+item.id+")" )
+                                                td
+                                                    h4
+                                                        a(href='/course/detail?cid=' + item.id)
+                                                            span.label.label-primary 进入
+                                                            | &nbsp
+                                                        -if(user && user.type==1 && user.id==teacher.id)
+                                                            a(href='javascript:void(0)',onclick="edit(" + item.id + ")" )
                                                                 span.label.label-success 编辑
-                                                                |&nbsp
-                                                            a(href='/course/delete?cid='+item.id)
+                                                                | &nbsp
+                                                            a(href='/course/delete?cid=' + item.id)
                                                                 span.label.label-danger 删除
+
                             #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal')
                                 .modal-dialog(role='document')
                                     .modal-content
@@ -215,6 +218,39 @@ block content
                                             button#submit.btn.btn-primary(type='button', data-dismiss='modal')
                                                 span.glyphicon.glyphicon-floppy-disk(aria-hidden='true')
                                                 | 保存
+                        #authorize.tab-pane.fade
+                            p#p_num 你还剩余#{teacher.access_num}个审核名额
+
+                            -if(students.length == 0)
+                                p 还没有和你同一所学校的注册学生
+                            -else
+                                table.table.table-hover
+                                    thead
+                                        tr
+                                            th #
+                                            th 账号
+                                            th 学校
+                                            th 年级
+                                            th 班级
+                                            th 姓名
+                                            th 状态
+                                            th 操作
+                                    tbody
+                                        each stu,idx in students
+                                            tr(id = stu.id)
+                                                td #{idx + 1}
+                                                td #{stu.account}
+                                                td #{stu.school}
+                                                td #{stu.grade}
+                                                td #{stu.class}
+                                                td #{stu.name}
+                                                -if(stu.state == 1)
+                                                    td 已过审
+                                                    td 无
+                                                -else
+                                                    td 未过审
+                                                    td
+                                                        span.label.label-success 通过
                         #remark.tab-pane.fade
                             -if(user && user.type == 2)
                                 div

@@ -16,12 +16,12 @@ $(document).ready(function () {
                 console.log(res.id);
                 console.log($("tr[id = "+ res.id +"]").children('td:eq(6)').text());
 
-                if($("tr[id = "+ res.id +"]").children('td:eq(6)').text() == "封禁"){
-                    $("tr[id = "+ res.id +"]").children('td:eq(5)').html("未过审");
-                    $("tr[id = "+ res.id +"]").children('td:eq(6)').html("<span class=\"label label-success\">通过</span>");
+                if($("tr[id = "+ res.id +"]").children('td:last').text() == "封禁"){
+                    $("tr[id = "+ res.id +"]").children('td:eq(6)').html("未过审");
+                    $("tr[id = "+ res.id +"]").children('td:last').html("<span class=\"label label-success\">通过</span>");
                 }else{
-                    $("tr[id = "+ res.id +"]").children('td:eq(5)').html("已过审");
-                    $("tr[id = "+ res.id +"]").children('td:eq(6)').html("<span class=\"label label-danger\">封禁</span>");
+                    $("tr[id = "+ res.id +"]").children('td:eq(6)').html("已过审");
+                    $("tr[id = "+ res.id +"]").children('td:last').html("<span class=\"label label-danger\">封禁</span>");
                 }
             }
         })
