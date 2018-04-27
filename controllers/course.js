@@ -54,7 +54,9 @@ router.get('/', function(req, res, next) {
     ], function (err, courses,t_name) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('course/select_course',{
-            courses:courses,
+            courses:courses.sort(function (a,b) {
+                return (a.id < b.id)
+            }),
             t_name:t_name,
             user : user
         })
@@ -91,7 +93,9 @@ router.post('/', function(req, res, next) {
     ], function (err, courses,t_name) {
         // console.log(t_name);
         res.json({
-            courses:courses,
+            courses:courses.sort(function (a,b) {
+                return (a.id < b.id)
+            }),
             t_name:t_name
         })
     });

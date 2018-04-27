@@ -48,6 +48,14 @@ module.exports = function(sequelize, DataTypes) {
         },
         access_num:{
             type: DataTypes.INTEGER
+        },
+        course_num:{
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        mark_p_num:{
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     },{
         underscore: true,

@@ -1,7 +1,7 @@
 //
    Created by 刘柘林 on 2018/2/10.
 extends  ../layout
--var teachers,t_cnt
+-var teachers
 block script
     script(src='/js/my_js/select_teacher.js')
     script(src='/js/my_js/background.js')
@@ -31,17 +31,26 @@ block content
                     li 历史
                     li 地理
                     li 其他
+            .top-nav
+                h3
+                    b 排序
+                ul#sort
+                    li.select-cur(data-selected="1" id = "default") 默认排序
+                    li#mark 评分高低
+                    li#course_num 开课数量
     .select_course
         .container
             .testimonial-grids#teachers
                 each item,index in teachers
-                    .col-md-4.testimonial-grid
+                    .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-mark = item.dataValues.mark,data-course-num = item.dataValues.course_num)
                         .testimonial-grd
                             a(href='/information/detail?tid=' + '' + item.dataValues.id + '')
                                 i #{item.dataValues.name}
                                 | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
                                 br
-                                | 课程数量:&nbsp;#{t_cnt[index]}
+                                | 评分:&nbsp;#{item.dataValues.mark}
+                                br
+                                | 课程数量:&nbsp;#{item.dataValues.course_num}
                             .testimonial-grd-pos
                                 span
             //.clearfix

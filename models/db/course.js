@@ -35,6 +35,10 @@ module.exports = function(sequelize, DataTypes) {
         mark:{
             type: DataTypes.DOUBLE,
             defaultValue: 5.0
+        },
+        mark_p_num:{
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     },{
         underscore: true,

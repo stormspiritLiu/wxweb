@@ -35,6 +35,20 @@ function search() {
         }
     })
 }
+
+var sortByMark = function(a, b) {
+    return $(a).attr("data-mark") > $(b).attr("data-mark") ? -1 : 1;
+}
+var sortByCourseNum = function(a, b) {
+    return $(a).attr("data-course-num") > $(b).attr("data-ptp") ? -1 : 1;
+}
+var sortById = function(a, b) {
+    return $(a).attr("data-id") > $(b).attr("data-id") ? -1 : 1;
+}
+var sortBy = function(sortBy) {
+    var sortEle = $('#teachers>div').sort(sortBy);
+    $('#teachers').empty().append(sortEle);
+}
 $(document).ready(function () {
     $("#grade").on('click','li',function () {
         $(this).addClass("select-cur");
@@ -50,4 +64,23 @@ $(document).ready(function () {
         $(this).siblings().attr("data-selected","0");
         search();
     });
+    $("#sort").on('click','li',function () {
+        $(this).addClass("select-cur");
+        $(this).attr("data-selected","1");
+        $(this).siblings().removeClass();
+        $(this).siblings().attr("data-selected","0");
+    });
+
+    //课程按照评分排序
+    $("#mark").on('click',function () {
+        sortBy(sortByMark);
+    })
+    //课程按照课程数量排序
+    $("#course_num").on('click',function () {
+        sortBy(sortByCourseNum);
+    })
+    //课程按照默认排序
+    $("#default").on('click',function () {
+        sortBy(sortById);
+    })
 })

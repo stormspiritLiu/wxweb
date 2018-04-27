@@ -44,18 +44,20 @@ block content
                 h3
                     b 排序
                 ul#sort
-                    li.select-cur(data-selected="1") 默认排序
-                    li 评分高低
-                    li 参与人数
+                    li.select-cur(data-selected="1" id = "default") 默认排序
+                    li#mark 评分高低
+                    li#participants 参与人数
     .select_course
         .container
             .testimonial-grids#courses
                 each item,index in courses
-                    .col-md-4.testimonial-grid
+                    .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-mark = item.dataValues.mark,data-ptp = item.dataValues.participants)
                         .testimonial-grd
                             a(href='/course/detail?cid='+ '' + item.dataValues.id+ '')
                                 i #{item.dataValues.title}
                                 | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
+                                br
+                                | 评分：#{item.dataValues.mark}
                                 br
                                 | 参与人数：#{item.dataValues.participants}
                                 br
