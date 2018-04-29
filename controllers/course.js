@@ -6,7 +6,6 @@ var router =  express.Router();
 var Course = require('../models').Course;
 var Teacher = require('../models').Teacher;
 var Course_Outline = require('../models').Course_Outline;
-var Course_Remark = require('../models').Course_Remark;
 var Course_Student = require('../models').Course_Student;
 var Resource = require('../models').Resource;
 var async = require('async');
@@ -130,7 +129,13 @@ router.get('/detail',function (req, res, next) {
             })
         },
         function (course, callback) {
-            Course_Remark.findByCId(cid).then(function (remarks) {
+            Course_Student.findAll({
+                where : {
+                    c_id : cid,
+                    mark: [1,2,3,4,5]
+
+                }
+            }).then(function (remarks) {
                 callback(null,course,remarks);
             })
         },
@@ -149,7 +154,8 @@ router.get('/detail',function (req, res, next) {
                 Course_Student.count({
                     where : {
                         c_id : course.id,
-                        s_id : req.session.student.id
+                        s_id : req.session.student.id,
+                        state : 1
                     }
                 }).then(function (cnt) {
                     if(cnt == 1)
@@ -191,12 +197,28 @@ router.post('/add_course',function (req, res, next) {
         title:req.body.title,
         information:req.body.information
     }).then(function (course) {
-        var baseUrl = path.join(__dirname, '../public/resource/',course.id.toString());
-        if (!fs.existsSync(baseUrl)) {
-            fs.mkdirSync(baseUrl);
+        if(course) {
+            var baseUrl = path.join(__dirname, '../public/resource/',course.id.toString());
+            if (!fs.existsSync(baseUrl)) {
+                fs.mkdirSync(baseUrl);
+            }
+
+            Teacher.findById(req.session.teacher.id).then(function (teacher) {
+                console.log(teacher.course_num);
+                Teacher.update({
+                    course_num : teacher.course_num + 1
+                },{
+                    where:{
+                        id : req.session.teacher.id
+                    }
+                }).then( function () {
+                    res.json({code: 200, order: 'add', course: course});
+                })
+            })
         }
-        if(course) res.json({code:200,order:'add',course:course});
-        else res.json({code:404,message:'找不到该门课程'})
+        else {
+            res.json({code:404,message:'找不到该门课程'})
+        }
     })
 })
 
@@ -243,34 +265,87 @@ router.get('/delete',function (req, res, next) {
             id:req.query.cid
         }
     }).then(function () {
-        deleteall(path.join(__dirname , '../public/resource/' , req.query.cid));
-        res.redirect('/information');
+        Teacher.findById(req.session.teacher.id).then(function (teacher) {
+            console.log(teacher.course_num);
+            Teacher.update({
+                course_num : teacher.course_num - 1
+            },{
+                where:{
+                    id : req.session.teacher.id
+                }
+            }).then( function () {
+                deleteall(path.join(__dirname , '../public/resource/' , req.query.cid));
+                res.redirect('/information');
+            })
+        })
+
     })
 })
-
 
 //学生加入课程
 router.get('/join',function (req, res, next) {
     if(!req.session.student) res.redirect('/login');
     else{
-        Course_Student.create({
-            c_id : req.query.cid,
-            s_id : req.session.student.id
-        }).then(function () {
-            res.redirect('/course/detail?cid='+req.query.cid)
+        Course_Student.count({
+            where : {
+                c_id : req.query.cid,
+                s_id : req.session.student.id
+            }
+        }).then(function (cnt) {
+            if(cnt == 0) {
+                Course_Student.create({
+                    c_id: req.query.cid,
+                    s_id: req.session.student.id,
+                    state: 1
+                })
+            }
+            else{
+                Course_Student.update({
+                    state: 1
+                },{
+                    where :{
+                        c_id: req.query.cid,
+                        s_id: req.session.student.id,
+                    }
+                })
+            }
+            Course.findById(req.query.cid).then(function (course) {
+                Course.update({
+                    participants: course.participants + 1
+                }, {
+                    where: {
+                        id: req.query.cid
+                    }
+                }).then(function () {
+                    res.redirect('/course/detail?cid=' + req.query.cid)
+                })
+            })
         })
+
     }
 })
 
 //学生退出课程
 router.get('/quit',function (req, res, next) {
-    Course_Student.destroy({
+    Course_Student.update({
+        state : 0
+    },{
         where:{
             c_id : req.query.cid,
             s_id : req.session.student.id
         }
     }).then(function () {
-        res.redirect('/information')
+        Course.findById(req.query.cid).then(function (course) {
+            Course.update({
+                participants : course.participants - 1
+            },{
+                where : {
+                    id : req.query.cid
+                }
+            }).then(function () {
+                res.redirect('/information')
+            })
+        })
     })
 })
 

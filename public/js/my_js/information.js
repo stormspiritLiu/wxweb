@@ -138,18 +138,10 @@ $(document).ready(function () {
             type: 'post',
 
             success: function (res) {
-                console.log(res.remark)
-                var index = $('.well').length + 1;
-                var str = "<div class=\"well\">#" + index +
-                    "评分："+res.remark.mark+ "<br>" +res.remark.information +
-                    // "<div style='float: right;'>"+ res.remark.create_time.getFullYear() +
-                    // "-"+res.remark.create_time.getMonth()+1 +
-                    // "-"+res.remark.create_time.getDate() +"</div>"
-                "</div>"
-                $(".grid_3.grid_5:last").append(str)
+                toastr.success("评论成功")
             },
             error : function() {
-                alert("异常！");
+                toastr.warning("异常!")
             }
 
         })

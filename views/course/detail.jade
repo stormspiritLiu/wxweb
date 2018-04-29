@@ -158,7 +158,7 @@ block content
                                     button.btn.btn-primary(type='button', data-toggle='modal', data-target='#myModal1')
                                         | 评价课程
                             .grid_3.grid_5
-                                -if(remarks.length==0)
+                                -if(course.mark_p_num==0)
                                     p 暂无评论
                                 -else
                                     each item,index in remarks
@@ -167,7 +167,7 @@ block content
                                             br
                                             | #{item.information}
                                             div(style='float:right')
-                                                | #{item.create_time.getFullYear()}-#{item.create_time.getMonth() + 1}-#{item.create_time.getDate()}
+                                                | #{item.update_time.getFullYear()}-#{item.update_time.getMonth() + 1}-#{item.update_time.getDate()}
                             #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal1')
                                 .modal-dialog(role='document')
                                     .modal-content

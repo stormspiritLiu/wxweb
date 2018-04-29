@@ -1,5 +1,5 @@
 extends layout
-
+-var courses,teachers,t_name
 block content
     // banner
     .banner
@@ -37,76 +37,36 @@ block content
     .testimonials
         .container
             h3 热门课程
-            .testimonial-grids
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        a
-                            | Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
-                            i
-                                | Micheal
-                                span Manager
-                        .testimonial-grd-pos
-                            span
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        a
-                            | Temporibus autem quibusdam et aut officiis debitis aut
-                            | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
-                            | sint et molestiae non recusandae.
-                            i
-                                | Smith
-                                span Manager
-                        .testimonial-grd-pos1
-                            span
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        a
-                            | Temporibus autem quibusdam et aut officiis debitis aut
-                            | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
-                            | sint et molestiae non recusandae.
-                            i
-                                | Williums
-                                span Manager
-                        .testimonial-grd-pos2
-                            span
-                .clearfix
+            .testimonial-grids#courses
+                    each item,index in courses
+                        .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-mark = item.dataValues.mark,data-ptp = item.dataValues.participants)
+                            .testimonial-grd
+                                a(href='/course/detail?cid=' + '' + item.dataValues.id + '')
+                                    i #{item.dataValues.title}
+                                    | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
+                                    br
+                                    | 评分：#{item.dataValues.mark}
+                                    br
+                                    | 参与人数：#{item.dataValues.participants}
+                                    br
+                                    | 教师:&nbsp;
+                                    span #{t_name[index]}
+                                .testimonial-grd-pos
+                                    span
     // 名牌讲师
     .testimonials
         .container
             h3 名牌讲师
-            .testimonial-grids
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        p
-                            | Temporibus autem quibusdam et aut officiis debitis aut
-                            | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
-                            | sint et molestiae non recusandae.
-                            i
-                                | Micheal
-                                span Manager
-                        .testimonial-grd-pos
-                            span
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        p
-                            | Temporibus autem quibusdam et aut officiis debitis aut
-                            | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
-                            | sint et molestiae non recusandae.
-                            i
-                                | Smith
-                                span Manager
-                        .testimonial-grd-pos1
-                            span
-                .col-md-4.testimonial-grid
-                    .testimonial-grd
-                        p
-                            | Temporibus autem quibusdam et aut officiis debitis aut
-                            | rerum necessitatibus saepe eveniet ut et voluptates repudiandae
-                            | sint et molestiae non recusandae.
-                            i
-                                | Williums
-                                span Manager
-                        .testimonial-grd-pos2
-                            span
-                .clearfix
-
+            .testimonial-grids#teachers
+                    each item,index in teachers
+                        .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-mark = item.dataValues.mark,data-course-num = item.dataValues.course_num)
+                            .testimonial-grd
+                                a(href='/information/detail?tid=' + '' + item.dataValues.id + '')
+                                    i #{item.dataValues.name}
+                                    | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
+                                    br
+                                    | 评分:&nbsp;#{item.dataValues.mark}
+                                    br
+                                    | 课程数量:&nbsp;#{item.dataValues.course_num}
+                                .testimonial-grd-pos
+                                    span

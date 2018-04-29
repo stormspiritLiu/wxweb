@@ -17,6 +17,18 @@ module.exports = function(sequelize, DataTypes) {
         c_id: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        state:{
+            type: DataTypes.INTEGER,
+        },
+        mark: {
+            type: DataTypes.INTEGER
+        },
+        information:{
+            type: DataTypes.TEXT
+        },
+        update_time:{
+            type: DataTypes.TIME
         }
     },{
         underscore: true,

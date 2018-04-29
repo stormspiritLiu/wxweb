@@ -37,11 +37,12 @@ block content
                             a(href='#remark', data-toggle='tab') 用户评论
                     .tab-content
                         #information.tab-pane.fade.in.active
-                            div
-                                a(href='javascript:void(0)', onclick="start('info')")
-                                    span.badge.badge-primary(style='font-size:20px;margin:0 0 0.5em 0.5em') 编辑信息
-                                a(href='javascript:void(0)', onclick="start('password')")
-                                    span.badge.badge-warning(style='font-size:20px;margin:0 0 0.5em 0.5em') 修改密码
+                            -if(user && user.type==1 && user.id==teacher.id)
+                                div
+                                    a(href='javascript:void(0)', onclick="start('info')")
+                                        span.badge.badge-primary(style='font-size:20px;margin:0 0 0.5em 0.5em') 编辑信息
+                                    a(href='javascript:void(0)', onclick="start('password')")
+                                        span.badge.badge-warning(style='font-size:20px;margin:0 0 0.5em 0.5em') 修改密码
                             .col-md-6
                                 table.table.table-bordered
                                     p 账号:&emsp;#{teacher.account}
@@ -265,8 +266,13 @@ block content
                                             | # #{index + 1}&nbsp&nbsp&nbsp&nbsp评分：#{item.mark}
                                             br
                                             | #{item.information}
-                                            div(style='float:right')
-                                                | #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
+                                            -if(item.update_time == null)
+                                                div(style='float:right')
+                                                    | #{item.create_time.getFullYear()}-#{item.create_time.getMonth()+1}-#{item.create_time.getDate()}
+                                            -else
+                                                div(style='float:right')
+                                                    | #{item.update_time.getFullYear()}-#{item.update_time.getMonth()+1}-#{item.update_time.getDate()}
+
                             #myModal1.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal1')
                                 .modal-dialog(role='document')
                                     .modal-content
