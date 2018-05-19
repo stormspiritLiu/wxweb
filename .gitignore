@@ -47,6 +47,7 @@ migrations/
 seeders/
 
 public/resource/
+public/live_record/
 
 .idea/workspace.xml
 config/config.json

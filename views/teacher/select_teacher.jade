@@ -6,7 +6,7 @@ block script
     script(src='/js/my_js/select_teacher.js')
     script(src='/js/my_js/background.js')
 block content
-    .select_course
+    .select
         .container
             .top-nav
                 h3
@@ -38,8 +38,6 @@ block content
                     li.select-cur(data-selected="1" id = "default") 默认排序
                     li#mark 评分高低
                     li#course_num 开课数量
-    .select_course
-        .container
             .testimonial-grids#teachers
                 each item,index in teachers
                     .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-mark = item.dataValues.mark,data-course-num = item.dataValues.course_num)

@@ -70,21 +70,40 @@ function update_password(url) {
 }
 
 $(document).ready(function () {
+    //设置时间控件
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 'hour',
+        forceParse: 0
+    });
     //新建、更新课程
     $("#submit").click(function (event) {
         event.preventDefault();
+        var data =  $('#new_course').serialize();
+        var type = data.split("&")[3].split("=")[1]
+        console.log("xxxx" + data)
+        if(data.split("&")[0].split("=")[1] == ""){
+            toastr.warning("课程名不能为空")
+        }else if(type == "2" && data.split("&")[4].split("=")[1] == ""){
+            toastr.warning("推流密码不能为空")
+        }else {
+            $.ajax({
+                url: Url ,
+                data: data,
+                dataType: 'json',
+                type: 'post',
 
-        $.ajax({
-            url: Url ,
-            data: $('#new_course').serialize(),
-            dataType: 'json',
-            type: 'post',
-
-            success: function (res) {
-                if(res.code == 200 && res.order == 'add') {
-                    var index = parseInt($('#course_list > tr:last > td:first').html()) + 1;
-                    var str =
-                        "<tr id='"+res.course.id+"'>" +
+                success: function (res) {
+                    if(type == 2) location.reload();
+                    else if(res.code == 200 && res.order == 'add') {
+                        var index = parseInt($('#course_list > tr:last > td:first').html()) + 1;
+                        var str =
+                            "<tr id='"+res.course.id+"'>" +
                             "<td>" + index + "</td>" +
                             "<td>" + res.course.title + "</td>" +
                             "<td>" + res.course.grade + "</td>" +
@@ -93,36 +112,49 @@ $(document).ready(function () {
                             "<td>" + res.course.participants + "</td>" +
                             "<td>" + res.course.information + "</td>" +
                             "<td>" +
-                                "<h4>" +
-                                    "<a href=\"/course/detail?cid=" + res.course.id + "\">" +
-                                        "<span class=\"label label-primary\">进入</span>" + "&nbsp;" +
-                                    "</a>" +
-                                    "<a href=\"javascript:void(0)\" onclick=\"edit(" + res.course.id + ")\">" +
-                                        "<span class=\"label label-success\">编辑</span>" + "&nbsp;" +
-                                    "</a>" +
-                                    "<a href=\"/course/delete?cid=" + res.course.id + "\">" +
-                                        "<span class=\"label label-danger\">删除</span>" +
-                                    "</a>" +
-                                "</h4>" +
+                            "<h4>" +
+                            "<a href=\"/course/detail?cid=" + res.course.id + "\">" +
+                            "<span class=\"label label-primary\">进入</span>" + "&nbsp;" +
+                            "</a>" +
+                            "<a href=\"javascript:void(0)\" onclick=\"edit(" + res.course.id + ")\">" +
+                            "<span class=\"label label-success\">编辑</span>" + "&nbsp;" +
+                            "</a>" +
+                            "<a href=\"/course/delete?cid=" + res.course.id + "\">" +
+                            "<span class=\"label label-danger\">删除</span>" +
+                            "</a>" +
+                            "</h4>" +
                             "</td>" +
-                        "</tr>"
-                    $('#course_list').append(str);
+                            "</tr>"
+                        $('#course_list').append(str);
+                    }
+                    else if(res.code == 200 && res.order =='update'){
+                        $('#'+res.cid+'>td:eq(1)').html(res.course.title);
+                        $('#'+res.cid+'>td:eq(2)').html(res.course.grade)
+                        $('#'+res.cid+'>td:eq(3)').html(res.course.category)
+                        $('#'+res.cid+'>td:eq(6)').html(res.course.information)
+                    }
+                    else{
+                        alert(res.message)
+                    }
+                },
+                error : function() {
+                    alert("异常！");
                 }
-                else if(res.code == 200 && res.order =='update'){
-                    $('#'+res.cid+'>td:eq(1)').html(res.course.title);
-                    $('#'+res.cid+'>td:eq(2)').html(res.course.grade)
-                    $('#'+res.cid+'>td:eq(3)').html(res.course.category)
-                    $('#'+res.cid+'>td:eq(6)').html(res.course.information)
-                }
-                else{
-                    alert(res.message)
-                }
-            },
-            error : function() {
-                alert("异常！");
-            }
 
-        })
+            })
+        }
+
+    })
+    //切换课程类型
+    $("#type").change(function (event) {
+        console.log( $("#type").val() )
+        if($("#type").val() == 1){
+            //一般课程
+            $("#live").attr("style","display:none;")
+        }else{
+            //直播课程
+            $("#live").attr("style","display:inline;")
+        }
     })
     //新建评论
     $("#remark_submit").click(function (event) {
@@ -208,7 +240,7 @@ $(document).ready(function () {
         update_password('/information/update_password_tea')
     })
     //教师对学生进行审核
-    $(".label.label-success ").click(function () {
+    $(".label.my_label-success ").click(function () {
         var num = $("#p_num").text().replace(/[^0-9]/ig,"")
         $.ajax({
             url: '/teacher/authorize',

@@ -6,6 +6,7 @@ var router =  express.Router();
 var Teacher = require('../models').Teacher;
 var Student = require('../models').Student;
 var Course = require('../models').Course;
+var Live = require('../models').Live;
 var Course_Student = require('../models').Course_Student;
 var Teacher_Remark = require('../models').Teacher_Remark;
 var async = require('async');
@@ -42,14 +43,24 @@ function teacher_detail(tid,req,res) {
             }).then(function (students) {
                 callback(null,teacher,courses,remarks,students)
             })
+        },
+        function (teacher,courses,remarks,students,callback) {
+            Live.findAll({
+                where:{
+                    t_id: teacher.id
+                }
+            }).then(function (lives) {
+                callback(null,teacher,courses,remarks,students,lives)
+            })
         }
-    ],function (err, teacher,courses,remarks,students) {
+    ],function (err, teacher,courses,remarks,students,lives) {
         var user = (req.session.student)?req.session.student:req.session.teacher
         res.render('teacher/information',{
             teacher : teacher,
             courses : courses,
             remarks : remarks,
             students: students,
+            lives: lives,
             user : user
         })
     })

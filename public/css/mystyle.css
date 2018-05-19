@@ -1,4 +1,4 @@
-.select_course{
+.select{
 	padding:1.5em 0em;
 }
 
@@ -35,4 +35,12 @@
 
 .my_title1{
 	font-size:1.2em;
+}
+
+.my_label-success {
+    background-color: #5cb85c;
+}
+.my_label-success[href]:hover,
+.my_label-success[href]:focus {
+    background-color: #449d44;
 }

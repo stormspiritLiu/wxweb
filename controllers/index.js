@@ -12,3 +12,4 @@ exports.information = require('./information');
 exports.remark = require('./remark');
 exports.video = require('./video');
 exports.jwplayer = require('./jwplayer');
+exports.live = require('./live');

@@ -5,6 +5,7 @@ exports.Admin = require('./admin');
 exports.Student = require('./student');
 exports.Teacher = require('./teacher');
 exports.Course = require('./course');
+exports.Live = require('./live');
 exports.Resource = require('./resource');
 exports.Course_Outline = require('./course_outline');
 exports.Course_Student = require('./course_student');

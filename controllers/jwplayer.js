@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
             var file = path.join('/resource/',req.query.cid,'/',video.f_name);
             var user = (req.session.student)?req.session.student:req.session.teacher;
             console.log(file)
-            res.render('jwplayer',{
+            res.render('on_play',{
                 file: file,
                 user : user
             })

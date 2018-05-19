@@ -1,10 +1,12 @@
 //
    Created by 刘柘林 on 2018/3/3.
 extends  ../layout
--var teacher,courses,remarks,students
+-var teacher,courses,lives,remarks,students
 block script
+    link(href='/css/bootstrap-datetimepicker.min.css',rel='stylesheet' type='text/css', media='all')
     script(src='/js/my_js/information.js')
-
+    script(src='/js/bootstrap-datetimepicker.js')
+    script(src='/js/bootstrap-datetimepicker.zh-CN.js')
 block content
     .typo
         .container
@@ -138,7 +140,7 @@ block content
                                 table.table
                                     thead
                                         tr
-                                            th #
+                                            th 普通课程
                                             th 名称
                                             th 年级
                                             th 科目
@@ -167,6 +169,46 @@ block content
                                                                 | &nbsp
                                                             a(href='/course/delete?cid=' + item.id)
                                                                 span.label.label-danger 删除
+
+                            -if(lives.length != 0)
+                                .bs-docs-example
+                                    table.table
+                                        thead
+                                            tr
+                                                th 直播课程
+                                                th 名称
+                                                th 年级
+                                                th 科目
+                                                -if(user && user.type==1 && user.id==teacher.id)
+                                                    th 密码
+                                                th 开始时间
+                                                th 描述
+                                                th 操作
+                                        tbody#live_list
+                                            each item,index in lives
+                                                tr(id='live_' + item.id)
+                                                    td #{index + 1}
+                                                    td #{item.title}
+                                                    td #{item.grade}
+                                                    td #{item.category}
+                                                    -if(user && user.type==1 && user.id==teacher.id)
+                                                        td #{item.password}
+                                                    td #{item.start_time.getFullYear()}-#{item.start_time.getMonth() + 1}-#{item.start_time.getDate()} #{item.start_time.getHours()}:#{item.start_time.getMinutes()}
+                                                    td #{item.information}
+                                                    td
+                                                        h4
+                                                            a(href='/live/' + item.id)
+                                                                span.label.label-primary 进入
+                                                                | &nbsp
+                                                            -if(user && user.type==1 && user.id==teacher.id)
+                                                                -if(item.state != 3)
+                                                                    a(href='/live/end?lid=' + item.id)
+                                                                        span.label.label-warning 结束
+                                                                -else
+                                                                    span.label.label-default 已结束
+                                                                | &nbsp
+                                                                a(href='/live/delete?lid=' + item.id)
+                                                                    span.label.label-danger 删除
 
                             #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModal')
                                 .modal-dialog(role='document')
@@ -209,6 +251,23 @@ block content
                                                         option(value='生物') 生物
                                                         option(value='其他') 其他
                                                     br
+                                                    label(for='type') 类　型：
+                                                    select.form-control#type(name='type', style='width:50%;display:inline;margin:1px')
+                                                        option(value='1') 一般课程
+                                                        option(value='2') 直播课程
+                                                    br
+                                                    #live(style='display:none')
+                                                        label(for='live_password') 推流密码：
+                                                        input.form-control#live_password(name='live_password', type='text', style='width:50%;display:inline;margin:1px', placeholder='请输入...', onKeyUp="value=value.replace(/[^\\w\\.\\/]/ig,'')")
+                                                        br
+                                                        label(for='start_time') 开始时间：
+                                                        .input-group.date.form_date.col-md-5(style='width:50%;display:table;margin:1px',data-date='', data-date-format='yyyy-mm-dd hh:ii', data-link-field='dtp_input2', data-link-format='yyyy-mm-dd')
+                                                            input#start_time.form-control(name='start_time', size='16', type='text', value='', readonly='')
+                                                            span.input-group-addon
+                                                                span.glyphicon.glyphicon-remove
+                                                            span.input-group-addon
+                                                                span.glyphicon.glyphicon-calendar
+                                                    //input.form-control#start_time(name='title', type='text', style='width:50%;display:none;margin:1px', placeholder='请输入...', required='')
                                                     label(for='_information') 课程描述：
                                                     br
                                                     textarea.form-control#_information(name='information', style='width:80%;display:inline;margin:1px', cols='60', rows='5', wrap='')
@@ -251,7 +310,7 @@ block content
                                                 -else
                                                     td 未过审
                                                     td
-                                                        span.label.label-success 通过
+                                                        span.label.my_label-success 通过
                         #remark.tab-pane.fade
                             -if(user && user.type == 2)
                                 div

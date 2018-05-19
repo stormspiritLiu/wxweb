@@ -4,6 +4,7 @@
 var express = require('express');
 var router =  express.Router();
 var Course = require('../models').Course;
+var Live = require('../models').Live;
 var Teacher = require('../models').Teacher;
 var Course_Outline = require('../models').Course_Outline;
 var Course_Student = require('../models').Course_Student;
@@ -56,7 +57,7 @@ router.get('/', function(req, res, next) {
             courses:courses.sort(function (a,b) {
                 return (a.id < b.id)
             }),
-            t_name:t_name,
+            t_name:t_name.reverse(),
             user : user
         })
     });
@@ -190,36 +191,70 @@ router.get('/detail',function (req, res, next) {
 router.post('/add_course',function (req, res, next) {
     console.log('==============');
     console.log(req.body);
-    Course.create({
-        t_id:req.session.teacher.id,
-        category:req.body.category,
-        grade:req.body.grade,
-        title:req.body.title,
-        information:req.body.information
-    }).then(function (course) {
-        if(course) {
-            var baseUrl = path.join(__dirname, '../public/resource/',course.id.toString());
-            if (!fs.existsSync(baseUrl)) {
-                fs.mkdirSync(baseUrl);
-            }
+    if(req.body.type == 1){
+        //普通课程
+        Course.create({
+            t_id:req.session.teacher.id,
+            category:req.body.category,
+            grade:req.body.grade,
+            title:req.body.title,
+            information:req.body.information
+        }).then(function (course) {
+            if(course) {
+                var baseUrl = path.join(__dirname, '../public/resource/',course.id.toString());
+                if (!fs.existsSync(baseUrl)) {
+                    fs.mkdirSync(baseUrl);
+                }
 
-            Teacher.findById(req.session.teacher.id).then(function (teacher) {
-                console.log(teacher.course_num);
-                Teacher.update({
-                    course_num : teacher.course_num + 1
-                },{
-                    where:{
-                        id : req.session.teacher.id
-                    }
-                }).then( function () {
-                    res.json({code: 200, order: 'add', course: course});
+                Teacher.findById(req.session.teacher.id).then(function (teacher) {
+                    console.log(teacher.course_num);
+                    Teacher.update({
+                        course_num : teacher.course_num + 1
+                    },{
+                        where:{
+                            id : req.session.teacher.id
+                        }
+                    }).then( function () {
+                        res.json({code: 200, order: 'add', course: course});
+                    })
                 })
-            })
-        }
-        else {
-            res.json({code:404,message:'找不到该门课程'})
-        }
-    })
+            }
+            else {
+                res.json({code:404,message:'找不到该门课程'})
+            }
+        })
+    }
+    else{
+        Live.create({
+            t_id:req.session.teacher.id,
+            password: req.body.live_password,
+            category:req.body.category,
+            grade:req.body.grade,
+            title:req.body.title,
+            information:req.body.information,
+            start_time:req.body.start_time
+        }).then(function (live) {
+            console.log(live)
+            if(live) {
+                Teacher.findById(req.session.teacher.id).then(function (teacher) {
+                    console.log(teacher.course_num);
+                    Teacher.update({
+                        course_num : teacher.course_num + 1
+                    },{
+                        where:{
+                            id : req.session.teacher.id
+                        }
+                    }).then( function () {
+                        res.json({code: 200, order: 'live', live: live});
+                    })
+                })
+            }
+            else {
+                res.json({code:404,message:'找不到该门课程'})
+            }
+        })
+    }
+
 })
 
 //更新课程

@@ -1,0 +1,36 @@
+//
+   Created by 刘柘林 on 2018/5/7.
+extends  ../layout
+-var lives,t_name
+block script
+    script(src='/js/my_js/background.js')
+    script(src='/js/my_js/select_live.js')
+block content
+    .select
+        .container
+            .top-nav
+                h3
+                    b 直播状态
+                ul#state
+                    li.select-cur#all(data-selected="1") 全部
+                    li#on 正在进行
+                    li#start 未开始
+                    li#end 已结束
+        .container
+            .testimonial-grids#lives
+                each item,index in lives
+                    .col-md-4.testimonial-grid(data-id = item.dataValues.id,data-state = item.dataValues.state)
+                        .testimonial-grd
+                            a(href='/live/' + '' + item.dataValues.id + '')
+                                i #{item.dataValues.title}
+                                | #{item.dataValues.grade}&nbsp;#{item.dataValues.category}
+                                br
+                                | 开始时间：#{item.start_time.getFullYear()}-#{item.start_time.getMonth()+1}-#{item.start_time.getDate()}
+                                | #{item.start_time.getHours()}:#{item.start_time.getMinutes()}
+                                //br
+                                //| 参与人数：#{item.dataValues.participants}
+                                br
+                                | 教师:&nbsp;
+                                span #{t_name[index]}
+                            .testimonial-grd-pos
+                                span
