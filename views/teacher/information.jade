@@ -179,6 +179,7 @@ block content
                                                 th 名称
                                                 th 年级
                                                 th 科目
+                                                th 房间id
                                                 -if(user && user.type==1 && user.id==teacher.id)
                                                     th 密码
                                                 th 开始时间
@@ -191,6 +192,7 @@ block content
                                                     td #{item.title}
                                                     td #{item.grade}
                                                     td #{item.category}
+                                                    td #{item.id}
                                                     -if(user && user.type==1 && user.id==teacher.id)
                                                         td #{item.password}
                                                     td #{item.start_time.getFullYear()}-#{item.start_time.getMonth() + 1}-#{item.start_time.getDate()} #{item.start_time.getHours()}:#{item.start_time.getMinutes()}

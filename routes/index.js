@@ -72,5 +72,5 @@ router.use('/information', controller.information);
 router.use('/video', controller.jwplayer);
 //router.use('/jwplayer', controller.jwplayer);
 router.use('/live', controller.live);
-
+router.use('/help', controller.help);
 module.exports = router;

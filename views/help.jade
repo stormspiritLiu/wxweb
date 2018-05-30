@@ -1,0 +1,74 @@
+extends layout
+
+block content
+    .contact
+        .container
+            h3  直播教程-OBS的使用方法
+            p
+                br
+            p
+                strong 1.软件介绍
+            p
+                span OBS 是一款国外开发的专业直播工具。大部分使用电脑直播的主播，都在使用 OBS 进行直播。
+            p
+                | 官方下载地址：
+                a(href='http://obsproject.com/', target='_blank', textvalue='http://obsproject.com/', style='color: rgb(84, 141, 212); text-decoration: underline;')
+                    span(style='color: rgb(84, 141, 212);') http://obsproject.com/
+            p
+                | 或点击这里下载：
+                a(href='http://dl.quanmin.tv/OBS-Studio.exe', target='_self', style='color: rgb(84, 141, 212); text-decoration: underline;')
+                    span(style='color: rgb(84, 141, 212);') http://dl.quanmin.tv/OBS-Studio.exe
+            p
+                br
+            p
+                br
+            p
+                strong 2.OBS 设置
+            p
+                span 下图是 OBS 主界面的简要介绍
+            p(style='text-align: center;')
+                span
+                    img(src='/images/OBS1.jpg', title='', alt='', width='696', height='513', style='width: 696px; height: 513px;')
+            h4
+                br
+            p
+                strong 2.1 添加来源
+            p
+                span 首先，添加来源。来源就是直播时，要让观众老爷们看到的画面。
+            p(style='text-align: center;')
+                strong
+                    img(src='/images/OBS2.jpg', title='', alt='', width='655', height='543', style='width: 655px; height: 543px;')
+            p 在任意『场景』中，点击添加，选择需要的捕获模式。主要有两种捕获方式：显示器获取与获取窗口。
+            p 常用的捕获方式：
+            p -显示器捕获：这是最简单的方式，直播画面就是你显示器中的画面；
+            p -窗口捕获：只需要观众看到电脑某几个窗口的画面；
+            p(line='iFvB', style='text-align: center;')
+                span.ql-author-79306
+                    img(src='/images/OBS3.jpg', title='', alt='', width='746', height='623', style='width: 746px; height: 623px;')
+            p 选择完捕获模式后，在窗口中选择你要直播的窗口画面。点击确定，将来源添加至当前的场景中。
+            p 注：捕获窗口，可以先打开要直播的窗口，否则可能找不到相应的窗口。
+            p
+                strong 2.2 推流设置
+            p 添加完来源后，我们需要填写流地址和密钥。
+            p 第一步：OBS 中打开设置，进入『流设置』，在『流类型』中，选择『自定义流媒体服务器』；
+            p(line='Ajaa')
+                span 第二步：进入『我的信息 - 我的课程』，找到相应的课程，获取房间id和密码；
+            p(line='Ajaa')
+                span.ql-author-79306 第三步：将RTMP服务器地址填写到 OBS 的 URL 中，将“『房间id』?pw=『密码』”填写到 OBS 的流名称中，并在 OBS 中点击保存。
+            p(line='Ajaa', style='text-align: center;')
+                spa
+                    img(src='/images/OBS4.jpg', title='', alt='', width='849', height='528', style='width: 849px; height: 528px;')
+            p
+                strong 3.设置完成，开始直播
+            p 完成以上设置后，基础设置就已经完成了。在 OBS 主界面点击『开始推流』开始直播。
+            p 如果想要结束直播，只需要在 OBS 主界面中，点击『退出』并在『我的信息』页面中结束相应的直播。
+            p
+                br
+            p
+                br
+            p
+                strong 4.关于分辨率、码率、FPS
+            p OBS 在安装好后，会有默认的配置。通常情况下，使用以下配置：
+            p -分辨率：与屏幕分辨率相同。
+            p -码率：默认2500，可设置在 2000 - 3000 之间；（码率越高，对电脑性能要求越高）
+            p -FPS：默认30，可设置在 24 - 30 之间；（分辨率、码率相同的情况下，FPS 越高，画面越流畅，对设备性能要求越高）
