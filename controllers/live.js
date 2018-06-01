@@ -151,7 +151,7 @@ router.get('/:lid?', function(req, res, next) {
                         })
                     } else {
                         //已结束
-                        var file = path.join('/live_record/',lid) + '.flv';
+                        var file = '/' + path.join('/live_record/',lid) + '.flv';
                         var user = (req.session.student) ? req.session.student : req.session.teacher;
                         console.log("3333" + file)
                         res.render('on_play', {
